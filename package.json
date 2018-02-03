@@ -1,7 +1,7 @@
 {
   "name": "calculator",
   "version": "1.0.0",
-  "description": "A demo for unit-testing docker containers",
+  "description": "A demo of a simple nodejs app Calculator",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -17,7 +17,10 @@
     "express": "^4.16.2"
   },
   "devDependencies": {
+    "math": "0.0.3",
     "mocha": "^3.2.0",
-    "supertest": "^2.0.1"
+    "supertest": "^2.0.1",
+    "mathjs": "3.20.1",
+    "jsbeautify":"1.7.5"
   }
 }
