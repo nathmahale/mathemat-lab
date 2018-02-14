@@ -83,7 +83,7 @@ describe('Calculator unit tests', function() {
             })
     });
 
-    it("missing parameter 'first'", function(done) {
+    it("missing param 'first'", function(done) {
         request(app)
             .get("/calculator/add?second=3.4")
             .expect('Content-Type', /text/)
