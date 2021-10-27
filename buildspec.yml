@@ -12,7 +12,7 @@ phases:
     runtime-versions:
       nodejs: 12
     commands:
-       - sudo chown -R 1000:1000 "/root/.npm"
+       - chown -R 1000:1000 "/root/.npm"
        - npm install
 #   pre_build:
 #     run-as: ec2-user
