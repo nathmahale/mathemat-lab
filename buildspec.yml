@@ -13,7 +13,9 @@ phases:
       nodejs: 12
     commands:
 #        - chown -R 1000:1000 "/root/.npm"
-       - npm install -g --unsafe-perm=true --allow-root
+#        - npm install -g --unsafe-perm=true --allow-root
+      - npm -v
+      - npm install -g npm@latest
 #   pre_build:
 #     run-as: ec2-user
 #     on-failure: ABORT
