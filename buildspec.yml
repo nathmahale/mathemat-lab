@@ -7,7 +7,7 @@ env:
 
 phases:
   install:
-    run-as: codebuild-user
+    run-as: root
     on-failure: ABORT
     runtime-versions:
       nodejs: 12
@@ -15,6 +15,7 @@ phases:
 #        - chown -R 1000:1000 "/root/.npm"
 #        - npm install -g --unsafe-perm=true --allow-root
       - npm -v
+      - npm cache clean --force
       - npm install -g npm@latest
 #   pre_build:
 #     run-as: ec2-user
