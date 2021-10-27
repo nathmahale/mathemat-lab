@@ -1,13 +1,13 @@
 version: 0.2
 
-run-as: ec2-user
+run-as: codebuild-user
 
 env:
   git-credential-helper: no
 
 phases:
   install:
-    run-as: ec2-user
+    run-as: codebuild-user
     on-failure: ABORT
     runtime-versions:
       nodejs: 12
