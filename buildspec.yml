@@ -40,11 +40,11 @@ phases:
 #       - location
 #     base-directory: location
 #     discard-paths: no
-# artifacts:
-#   files:
-#     - /var/log/messages
-#   name: artifact-name
-#   discard-paths: yes
-#   base-directory: location
-#   enable-symlinks: yes
-#   s3-prefix: Build
+artifacts:
+  files:
+    - '**/*'
+  name: artifact-name
+  discard-paths: yes
+  base-directory: base_dir
+  enable-symlinks: yes
+  s3-prefix: Build
