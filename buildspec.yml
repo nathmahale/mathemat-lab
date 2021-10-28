@@ -43,8 +43,7 @@ phases:
 artifacts:
   files:
     - '**/*'
-  name: artifact-name
-  discard-paths: yes
-  base-directory: base_dir
+  name: output
+  base-directory: 'dist'
   enable-symlinks: yes
   s3-prefix: Build
