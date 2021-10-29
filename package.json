@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "mocha ./tests/test.js"
+    "test": "mocha ./tests/test.js",
+    "build": "webpack --mode development"
   },
   "keywords": [
     "testing",
