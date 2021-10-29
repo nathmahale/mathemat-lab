@@ -12,21 +12,18 @@ phases:
     runtime-versions:
       nodejs: 12
     commands:
-#        - chown -R 1000:1000 "/root/.npm"
-#        - npm install -g --unsafe-perm=true --allow-root
-      - npm -v
       - npm cache clean --force
       - npm install -g npm@latest
-#   pre_build:
-#     run-as: ec2-user
-#     on-failure: ABORT
-#     commands:
-#       - command
-#   build:
-#     run-as: ec2-user
-#     on-failure: ABORT
-#     commands:
-#       - command
+  pre_build:
+    run-as: root
+    on-failure: ABORT
+    commands:
+      - npm i -D webpack webpack-cli
+  build:
+    run-as: root
+    on-failure: ABORT
+    commands:
+      - npm run build
   
 #   post_build:
 #     run-as: ec2-user
