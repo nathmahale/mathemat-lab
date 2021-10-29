@@ -19,6 +19,7 @@ phases:
     on-failure: ABORT
     commands:
       - npm i -D webpack webpack-cli
+      - npm audit fix --force
   build:
     run-as: root
     on-failure: ABORT
