@@ -12,7 +12,7 @@
     "testing",
     "docker"
   ],
-  "author": "xxxxxxxx",
+  "author": "nathmahale",
   "license": "MIT",
   "dependencies": {
     "express": "^4.16.2"

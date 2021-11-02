@@ -18,8 +18,9 @@ phases:
     run-as: root
     on-failure: ABORT
     commands:
-      - npm i -D webpack webpack-cli
+      - npm i --save-dev webpack webpack-cli
       - npm audit fix --force
+      - npm i --package-lock-only
   build:
     run-as: root
     on-failure: ABORT

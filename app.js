@@ -1,6 +1,4 @@
 var app = require('express')();
-//var express = require('express');
-//var app = express();
 
 var router = require('./lib/routers/calcRouter');
 app.use("/calculator", router);
