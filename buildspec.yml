@@ -42,6 +42,8 @@ phases:
 artifacts:
   files:
     - '**/*'
+    - appspec.yaml
+    - buildspec.yml
   name: output
   base-directory: 'dist'
   enable-symlinks: yes
