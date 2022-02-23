@@ -135,7 +135,7 @@ describe('Calculator unit tests', function () {
             })
     });
 
-    it("dividing by zero'", function (done) {
+    it("dividing by zero", function (done) {
         request(app)
             .get("/calculator/div?first=1.2&second=0")
             .expect('Content-Type', /text/)
