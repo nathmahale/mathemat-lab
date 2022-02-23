@@ -11,11 +11,11 @@ pipeline {
                 sh 'npm run-script build' 
             }
         }
-        stage('Start') { 
-            steps {
-                sh 'npm start' 
-            }
-        }
+        // stage('Start') { 
+        //     steps {
+        //         sh 'npm start' 
+        //     }
+        // }
         stage('Test') { 
             steps {
                 sh 'npm test' 
