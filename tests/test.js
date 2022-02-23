@@ -9,7 +9,7 @@ describe('Calculator unit tests', function () {
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, {
-                result: 4.6
+                result: (1.2 + 3.4)
             })
             .end(function (err) {
                 if (err) {
@@ -147,4 +147,19 @@ describe('Calculator unit tests', function () {
                 return done();
             })
     });
+
+    it("math sine function", function (done) {
+        request(app)
+            .get("calculator/div?first=1&second=10")
+            .expect('Content-Type', /json/)
+            .expect(200, {
+                result: getCircleY(1, 10)
+            })
+            .end(function (err) {
+                if (err) {
+                    return done(err);
+                }
+                return done();
+            })
+    })
 });
