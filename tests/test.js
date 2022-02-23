@@ -151,6 +151,7 @@ describe('Calculator unit tests', function () {
     it("math sine function", function (done) {
         request(app)
             .get("calculator/sine?first=1&second=10")
+            .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, {
                 result: (Math.sin(1) * 10)
