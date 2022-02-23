@@ -73,7 +73,7 @@ describe('Calculator unit tests', function () {
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, {
-                result: (Math.pow(2, 2))
+                result: Math.pow(2, 2)
             })
             .end(function (err) {
                 if (err) {
@@ -154,7 +154,7 @@ describe('Calculator unit tests', function () {
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, {
-                result: (Math.sin(1) * 10)
+                result: Math.sin(1)
             })
             .end(function (err) {
                 if (err) {
