@@ -153,7 +153,7 @@ describe('Calculator unit tests', function () {
             .get("calculator/div?first=1&second=10")
             .expect('Content-Type', /json/)
             .expect(200, {
-                result: getCircleY(1, 10)
+                result: (Math.sin(1) * 10)
             })
             .end(function (err) {
                 if (err) {
@@ -161,5 +161,5 @@ describe('Calculator unit tests', function () {
                 }
                 return done();
             })
-    })
+    });
 });
