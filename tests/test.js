@@ -150,11 +150,59 @@ describe('Calculator unit tests', function () {
 
     it("math sine function", function (done) {
         request(app)
-            .get("/calculator/sine?first=1&second=10")
+            .get("/calculator/sine?first=1")
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, {
                 result: Math.sin(1)
+            })
+            .end(function (err) {
+                if (err) {
+                    return done(err);
+                }
+                return done();
+            })
+    });
+
+    it("math cosine function", function (done) {
+        request(app)
+            .get("/calculator/cosine?first=30")
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200, {
+                result: Math.cos(30)
+            })
+            .end(function (err) {
+                if (err) {
+                    return done(err);
+                }
+                return done();
+            })
+    });
+
+    it("math tan function", function (done) {
+        request(app)
+            .get("/calculator/tan?first=30")
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200, {
+                result: Math.tan(30)
+            })
+            .end(function (err) {
+                if (err) {
+                    return done(err);
+                }
+                return done();
+            })
+    });
+
+    it("math acos function", function (done) {
+        request(app)
+            .get("/calculator/acos?first=8&second=10")
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200, {
+                result: Math.acos(8/10)
             })
             .end(function (err) {
                 if (err) {
