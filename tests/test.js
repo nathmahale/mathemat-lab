@@ -150,7 +150,7 @@ describe('Calculator unit tests', function () {
 
     it("math sine function", function (done) {
         request(app)
-            .get("/calculator/sine?first=1")
+            .get("/calculator/sine?first=1&second=30")
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, {
@@ -166,7 +166,7 @@ describe('Calculator unit tests', function () {
 
     it("math cosine function", function (done) {
         request(app)
-            .get("/calculator/cosine?first=30")
+            .get("/calculator/cosine?first=30&second=30")
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, {
@@ -182,7 +182,7 @@ describe('Calculator unit tests', function () {
 
     it("math tan function", function (done) {
         request(app)
-            .get("/calculator/tan?first=30")
+            .get("/calculator/tan?first=30&second=30")
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, {
