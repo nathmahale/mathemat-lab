@@ -6,9 +6,29 @@ pipeline {
                 sh 'npm install' 
             }
         }
-        stage('Fix vulnerabilities') { 
+        stage('Perform info level audit') { 
             steps {
-                sh 'npm audit report' 
+                sh 'npm audit --audit-level=info'
+            }
+        }
+        stage('Perform low level audit') { 
+            steps {
+                sh 'npm audit --audit-level=low'
+            }
+        }
+        stage('Perform moderate level audit') { 
+            steps {
+                sh 'npm audit --audit-level=moderate'
+            }
+        }
+        stage('Perform high level audit') { 
+            steps {
+                sh 'npm audit --audit-level=high'
+            }
+        }
+        stage('Perform critical level audit') { 
+            steps {
+                sh 'npm audit --audit-level=critical'
             }
         }
         stage('Build') { 
