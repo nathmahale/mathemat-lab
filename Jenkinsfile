@@ -6,16 +6,16 @@ pipeline {
                 sh 'npm install' 
             }
         }
+        stage('Fix vulnerabilities') { 
+            steps {
+                sh 'npm audit fix' 
+            }
+        }
         stage('Build') { 
             steps {
                 sh 'npm run-script build' 
             }
         }
-        // stage('Start') { 
-        //     steps {
-        //         sh 'npm start' 
-        //     }
-        // }
         stage('Test') { 
             steps {
                 sh 'npm test' 
