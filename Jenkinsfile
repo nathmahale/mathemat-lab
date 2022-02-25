@@ -6,29 +6,14 @@ pipeline {
                 sh 'npm install' 
             }
         }
-        stage('Perform info level audit') { 
+        stage('npm audit report') { 
             steps {
-                sh 'npm audit --audit-level=info'
+                sh 'npm audit report'
             }
         }
-        stage('Perform low level audit') { 
+        stage('npn audit fix with dry-run flag') { 
             steps {
-                sh 'npm audit --audit-level=low'
-            }
-        }
-        stage('Perform moderate level audit') { 
-            steps {
-                sh 'npm audit --audit-level=moderate'
-            }
-        }
-        stage('Perform high level audit') { 
-            steps {
-                sh 'npm audit --audit-level=high'
-            }
-        }
-        stage('Perform critical level audit') { 
-            steps {
-                sh 'npm audit --audit-level=critical'
+                sh '$ npm audit fix --dry-run --json'
             }
         }
         stage('Build') { 
