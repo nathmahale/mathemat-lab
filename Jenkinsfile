@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Fix vulnerabilities') { 
             steps {
-                sh 'npm audit fix' 
+                sh 'npm audit report' 
             }
         }
         stage('Build') { 
