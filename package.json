@@ -10,7 +10,13 @@
   },
   "keywords": [
     "testing",
-    "docker"
+    "docker",
+    "jenkins",
+    "webpack",
+    "mocha",
+    "supertest",
+    "nodejs",
+    "ci-cd"
   ],
   "author": "nathmahale",
   "license": "MIT",
