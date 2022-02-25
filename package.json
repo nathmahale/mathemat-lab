@@ -16,7 +16,10 @@
     "mocha",
     "supertest",
     "nodejs",
-    "ci-cd"
+    "ci-cd",
+    "homelab",
+    "containers",
+    "fun"
   ],
   "author": "nathmahale",
   "license": "MIT",
