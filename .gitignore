@@ -104,3 +104,5 @@ dist
 .tern-port
 
 commit.sh
+
+*.swp

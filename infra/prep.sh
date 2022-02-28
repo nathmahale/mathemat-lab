@@ -1,20 +1,6 @@
 #!/bin/bash
 
-function configure_rootless_dockerd() {
-  sudo apt-get install -y docker-ce-rootless-extras iptables uidmap
-  dockerd-rootless-setuptool.sh install
-
-}
-
-function configure_cgroup_docker() {
-  sudo mkdir -p /sys/fs/cgroup/docker
-  sudo chmod -R 777 /sys/fs/cgroup/docker
-  sudo chmod -R 777 /sys/fs/cgroup/devices
-  echo "0-$(($(nproc) - 1))" >/sys/fs/cgroup/cpuset/docker/cpuset.cpus
-  echo 0 >/sys/fs/cgroup/cpuset/docker/cpuset.mems
-}
-
-function prep() {
+function create_docker_dependancies() {
   docker volume create jenkins-data
   docker volume create jenkins-docker-certs
 
@@ -24,7 +10,7 @@ function prep() {
 function create_dockerfile_jenkins() {
 
   cat >Dockerfile <<EOF
-FROM jenkins/jenkins:2.319.3-jdk11
+FROM jenkins/jenkins:latest
 USER root
 RUN apt-get update && apt-get install -y lsb-release
 RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
@@ -40,7 +26,7 @@ EOF
 }
 
 function build_docker_jenkins() {
-  docker build -t jenkins:v4 .
+  docker build -t jenkins:${VERSION} .
 
 }
 
@@ -67,7 +53,8 @@ function create_docker_dind_container() {
 
 }
 
-prep
+VERSION=$1
+create_docker_dependancies
 create_dockerfile_jenkins
 build_docker_jenkins
 create_docker_dind_container
