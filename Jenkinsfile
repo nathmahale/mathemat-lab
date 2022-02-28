@@ -14,7 +14,6 @@ pipeline {
                 sh 'docker image ls -a'
             }
         }
-        }
     }
 }
 
