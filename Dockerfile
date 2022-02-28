@@ -9,7 +9,7 @@ COPY . .
 COPY package*.json ./
 RUN npm install --package-lock
 
-RUN npm build
+RUN npm run-script build
 # remove development dependencies
 RUN npm prune --production
 # run node prune
@@ -24,4 +24,5 @@ COPY --from=BUILD_IMAGE /usr/src/app/node_modules ./node_modules
 
 EXPOSE 3000
 
-CMD ["node", "./dist/app.js"]
+RUN ls -lrth /usr/src/app/dist
+# CMD ["node", "./dist/app.js"]
