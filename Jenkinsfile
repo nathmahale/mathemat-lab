@@ -1,19 +1,19 @@
 pipeline {
     agent any
     stages {
-        stage('Docker info'){
+        stage('Get docker version'){
             steps{
-                sh 'docker info'
+                sh 'docker version -v'
             }
         }
-        // stage('Docker build') { 
-        //     steps {
-        //         sh 'docker build -t calculator:v0 .' 
-        //     }
-        // }
-        stage('Docker list image') { 
+        stage('Docker build') { 
             steps {
-                sh 'docker image ls -a'
+                sh 'docker build -t calculator:v0 .' 
+            }
+        }
+        stage('Docker list images') { 
+            steps {
+                sh 'docker image ls'
             }
         }
     }
