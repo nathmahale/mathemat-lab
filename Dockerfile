@@ -1,7 +1,7 @@
 FROM node:12-alpine AS BUILD_IMAGE
 
 RUN apk add sudo
-RUN sudo apk update -y && sudo apk upgrade && sudo apk add curl
+RUN sudo apk update && sudo apk upgrade && sudo apk add curl
 RUN curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | bash -s -- -b /usr/local/bin
 WORKDIR /usr/src/app
 COPY . .
