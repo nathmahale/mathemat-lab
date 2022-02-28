@@ -24,5 +24,4 @@ COPY --from=BUILD_IMAGE /usr/src/app/node_modules ./node_modules
 
 EXPOSE 3000
 
-RUN ls -lrth /usr/src/app/dist
-# CMD ["node", "./dist/app.js"]
+CMD ["node", "./dist/main.js"]
