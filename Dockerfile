@@ -10,6 +10,9 @@ COPY package*.json ./
 RUN npm install --package-lock
 
 RUN npm run-script build
+
+## test application
+RUN npm test
 # remove development dependencies
 RUN npm prune --production
 # run node prune
