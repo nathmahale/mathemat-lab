@@ -1,25 +1,19 @@
 pipeline {
-    agent any
+    agent 
+    {
+        docker { image 'node:12-alpine3.15' }
+    }
     stages {
-        stage('Install') { 
+        stage('Docker build') { 
             steps {
-                sh 'npm install' 
+                sh 'docker build -t calculator:v0 .' 
             }
         }
-        stage('npm audit report') { 
+        stage('Docker list image') { 
             steps {
-                sh 'npm audit report'
+                sh 'docker image ls -a'
             }
         }
-        stage('Build') { 
-            steps {
-                sh 'npm run-script build' 
-            }
-        }
-        stage('Test') { 
-            steps {
-                sh 'npm test' 
-            }
         }
     }
 }
