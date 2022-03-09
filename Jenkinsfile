@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        node{ 
-            label 'docker:dind'
-        }
-    }
+    agent any
     stages {
         stage('Get docker version'){
             steps{
