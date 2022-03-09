@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Docker build') { 
             steps {
-                sh 'docker build -t calculator:v0 .' 
+                sh 'docker build -t calculator:v1 .' 
             }
         }
         stage('Docker list images') { 

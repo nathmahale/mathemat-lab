@@ -11,11 +11,9 @@ RUN npm install --package-lock
 
 RUN npm run-script build
 
-## test application
 RUN npm test
-# remove development dependencies
 RUN npm prune --production
-# run node prune
+
 RUN /usr/local/bin/node-prune
 
 FROM node:12-alpine
