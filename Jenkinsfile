@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker{ 
+            image 'node-12:alpine'
+        }
+    }
     stages {
         stage('Get docker version'){
             steps{
@@ -8,7 +12,7 @@ pipeline {
         }
         stage('Docker build') { 
             steps {
-                sh 'docker build -t calculator:v1 .' 
+                sh 'docker build -t calculator:v2 .' 
             }
         }
         stage('Docker list images') { 
