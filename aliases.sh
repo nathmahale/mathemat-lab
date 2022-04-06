@@ -10,3 +10,4 @@ alias de="docker exec -it $*"
 alias dlgn='docker exec -it b86 bash'
 alias dlgn1='docker exec -it db8 /bin/sh'
 alias dlgnr='docker exec -it -u root b86 bash'
+
