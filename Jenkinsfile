@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Docker build') { 
             steps {
-                sh 'docker build -t calculator:v4 .' 
+                sh 'docker build -t calculator:$(git rev-parse --short HEAD) .' 
             }
         }
         stage('Docker list images') { 
