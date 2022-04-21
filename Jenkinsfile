@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Docker list images') { 
             steps {
-                sh 'docker image ls'
+                sh 'docker images calculator'
             }
         }
     }
