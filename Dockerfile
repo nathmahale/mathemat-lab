@@ -1,7 +1,9 @@
 FROM node:12-alpine AS BUILD_IMAGE
 
 RUN apk add curl && \
-    curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | sh -s -- -b /usr/local/bin
+    apk update && \
+    apk upgrade && \
+    npm install -g node-prune
 
 WORKDIR /usr/src/app
 COPY . .
@@ -10,8 +12,7 @@ COPY package*.json ./
 RUN npm install --package-lock && \
     npm run-script build && \
     npm test && \
-    npm prune --production && \
-    /usr/local/bin/node-prune
+    npm prune --production
 
 FROM node:12-alpine
 
