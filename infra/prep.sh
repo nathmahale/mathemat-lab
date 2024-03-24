@@ -55,8 +55,8 @@ function create_docker_dind_container() {
 }
 
 IMAGE_TAG_VERSION=$1
-# create_docker_dependancies
+create_docker_dependancies
 create_dockerfile_jenkins
-# build_docker_jenkins
-# create_docker_dind_container
-# create_jenkins_docker_container
+build_docker_jenkins
+create_docker_dind_container
+create_jenkins_docker_container
