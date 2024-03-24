@@ -1,0 +1,50 @@
+version: 0.2
+
+run-as: codebuild-user
+
+env:
+  git-credential-helper: no
+
+phases:
+  install:
+    run-as: root
+    on-failure: ABORT
+    runtime-versions:
+      nodejs: 12
+    commands:
+      - npm cache clean --force
+      - npm install -g npm@latest
+  pre_build:
+    run-as: root
+    on-failure: ABORT
+    commands:
+      - npm i --save-dev webpack webpack-cli
+      - npm audit fix --force
+      - npm i --package-lock-only
+  build:
+    run-as: root
+    on-failure: ABORT
+    commands:
+      - npm run build
+  
+#   post_build:
+#     run-as: ec2-user
+#     on-failure: ABORT
+#     commands:
+#       - command
+# reports:
+#   report-group-name-or-arn:
+#     files:
+#       - location
+#       - location
+#     base-directory: location
+#     discard-paths: no
+artifacts:
+  files:
+    - '**/*'
+    - appspec.yaml
+    - buildspec.yml
+  name: output
+  base-directory: 'dist'
+  enable-symlinks: yes
+  s3-prefix: Build
