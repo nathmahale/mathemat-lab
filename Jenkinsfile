@@ -1,24 +1,19 @@
 pipeline {
     agent any
     stages {
-        stage('Install') { 
-            steps {
-                sh 'npm install' 
+        stage('Get docker version'){
+            steps{
+                sh 'docker -v'
             }
         }
-        stage('npm audit report') { 
+        stage('Docker build') { 
             steps {
-                sh 'npm audit report'
+                sh 'docker build -t calculator:$(git rev-parse --short HEAD) .' 
             }
         }
-        stage('Build') { 
+        stage('Docker list images') { 
             steps {
-                sh 'npm run-script build' 
-            }
-        }
-        stage('Test') { 
-            steps {
-                sh 'npm test' 
+                sh 'docker images calculator'
             }
         }
     }
