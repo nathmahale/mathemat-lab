@@ -37,7 +37,7 @@
     "growl": "1.10.0",
     "superagent": "3.7.0",
     "debug": "4.3.5",
-    "diff": "3.5.0",
+    "diff": "5.2.0",
     "minimist": "1.2.8"
   },
   "repository": {
