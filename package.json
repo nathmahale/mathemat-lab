@@ -34,7 +34,7 @@
     "webpack": "5.76.0",
     "webpack-cli": "5.1.4",
     "formidable": "3.2.4",
-    "growl": "1.10.0",
+    "growl": "1.10.5",
     "superagent": "3.7.0",
     "debug": "4.3.5",
     "diff": "5.2.0",
