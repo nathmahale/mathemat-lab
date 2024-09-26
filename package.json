@@ -36,7 +36,7 @@
     "formidable": "3.2.4",
     "growl": "1.10.5",
     "superagent": "10.1.0",
-    "debug": "4.3.5",
+    "debug": "4.3.7",
     "diff": "5.2.0",
     "minimist": "1.2.8"
   },
