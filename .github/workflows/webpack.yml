@@ -42,6 +42,7 @@ jobs:
       -
         name: Get application version from package.json
         run: |
+          echo $PWD
           APPVERSION=$(jq --raw-output .version package.json)
       -
         name: Login to Docker Hub
