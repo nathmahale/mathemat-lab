@@ -1,4 +1,4 @@
-FROM node:12-alpine AS BUILD_IMAGE
+FROM node:current-alpine3.20 AS BUILD_IMAGE
 
 RUN apk add curl && \
     apk update && \
@@ -14,7 +14,7 @@ RUN npm install --package-lock && \
     npm test && \
     npm prune --production
 
-FROM node:12-alpine
+FROM node:current-alpine3.20
 
 WORKDIR /usr/src/app
 
