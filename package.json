@@ -27,6 +27,8 @@
     "express": "^4.16.2"
   },
   "devDependencies": {
+    "inflight": "1.0.6",
+    "glob": "11.0.0",
     "math": "0.0.3",
     "mocha": "10.7.3",
     "supertest": "7.0.0",
