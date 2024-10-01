@@ -42,7 +42,7 @@ jobs:
       -
         name: Get application version from package.json
         run: |
-          ls -lrth /home/runner/work/calculator-app-nodejs/
+          ls -lrth /home/runner/work/calculator-app-nodejs/calculator-app-nodejs
           APP_VERSION=$(jq --raw-output .version ../package.json)
           echo ${APP_VERSION}
       -
