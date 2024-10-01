@@ -24,6 +24,7 @@ jobs:
 
     - name: Build
       run: |
+        npm config set fund false --location=global  
         npm install --package-lock
         npm run-script build
         npm test

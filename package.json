@@ -27,7 +27,7 @@
     "express": "^4.16.2"
   },
   "devDependencies": {
-    "inflight": "1.0.6",
+    "lru-cache": "11.0.1",
     "glob": "11.0.0",
     "math": "0.0.3",
     "mocha": "10.7.3",
