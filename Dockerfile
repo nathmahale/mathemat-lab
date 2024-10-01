@@ -1,6 +1,7 @@
 FROM node:current-alpine3.20 AS buildimage
 
 # Passed from Github Actions
+ARG GIT_VERSION_TAG=unspecified
 ARG GIT_COMMIT_MESSAGE=unspecified
 ARG GIT_VERSION_HASH=unspecified
 
@@ -11,6 +12,7 @@ RUN apk add curl && \
 
 WORKDIR /usr/src/app
 
+RUN echo $GIT_VERSION_TAG > GIT_VERSION_TAG.txt
 RUN echo $GIT_COMMIT_MESSAGE > GIT_COMMIT_MESSAGE.txt
 RUN echo $GIT_VERSION_HASH > GIT_VERSION_HASH.txt
 
