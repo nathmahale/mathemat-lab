@@ -55,7 +55,7 @@ jobs:
         with:
           push: true
           tags: dmfpython/calculator-example-app:latest
-          context: .
+          context: ../../
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             GIT_COMMIT_MESSAGE=${{ github.event.head_commit.message }}
