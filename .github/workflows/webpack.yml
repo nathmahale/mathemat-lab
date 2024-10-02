@@ -37,6 +37,7 @@ jobs:
     - name: Increment Package Version
       run: |
         VERSION_INFO=$(cat ${GITHUB_WORKSPACE}/version.txt)
+        echo ${VERSION_INFO}
         grunt bump:${VERSION_INFO}
 
     - name: Publish NPM package

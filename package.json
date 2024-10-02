@@ -1,11 +1,11 @@
 {
-  "name": "mathemat-lab",
-  "version": "1.0.0",
+  "name"       : "mathemat-lab",
+  "version"    : "1.0.0",
   "description": "A demo of a simple nodejs app Calculator with automated testing",
-  "main": "app.js",
-  "scripts": {
+  "main"       : "app.js",
+  "scripts"    : {
     "start": "node app.js",
-    "test": "mocha ./tests/test.js --exit",
+    "test" : "mocha ./tests/test.js --exit",
     "build": "webpack --mode development"
   },
   "keywords": [
@@ -20,30 +20,30 @@
     "containers",
     "fun"
   ],
-  "author": "nathmahale",
-  "license": "MIT",
+  "author"      : "nathmahale",
+  "license"     : "MIT",
   "dependencies": {
     "express": "^4.16.2"
   },
   "devDependencies": {
-    "grunt": "1.6.1",
-    "lru-cache": "11.0.1",
-    "glob": "11.0.0",
-    "math": "0.0.3",
-    "mocha": "10.7.3",
-    "supertest": "7.0.0",
-    "mathjs": "13.1.1",
-    "webpack": "5.95.0",
+    "grunt"      : "1.6.1",
+    "lru-cache"  : "11.0.1",
+    "glob"       : "11.0.0",
+    "math"       : "0.0.3",
+    "mocha"      : "10.7.3",
+    "supertest"  : "7.0.0",
+    "mathjs"     : "13.1.1",
+    "webpack"    : "5.95.0",
     "webpack-cli": "5.1.4",
-    "formidable": "3.2.4",
-    "growl": "1.10.5",
-    "superagent": "10.1.0",
-    "debug": "4.3.7",
-    "diff": "7.0.0",
-    "minimist": "1.2.8"
+    "formidable" : "3.2.4",
+    "growl"      : "1.10.5",
+    "superagent" : "10.1.0",
+    "debug"      : "4.3.7",
+    "diff"       : "7.0.0",
+    "minimist"   : "1.2.8"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nathmahale/calculator-app-nodejs.git"
+    "url" : "https://github.com/nathmahale/calculator-app-nodejs.git"
   }
 }
