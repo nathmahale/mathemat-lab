@@ -58,8 +58,7 @@ jobs:
         id: vars
         run: |
           echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-          calculatedSha=$(git rev-parse --short ${{ github.sha }})
-          echo "COMMIT_SHORT_SHA=$calculatedSha" >> $GITHUB_ENV
+          echo "COMMIT_SHORT_SHA=${GITHUB_SHA:0:6}" >> $GITHUB_ENV
         
       - name: Build and push
         uses: docker/build-push-action@v6
