@@ -23,7 +23,7 @@ jobs:
         node-version: 20.x
         check-latest: false
 
-    - name: Local Test Build
+    - name: Local Test Build | Increment Package Version
       run: |
         npm config set fund false --location=global  
         npm update
@@ -33,9 +33,6 @@ jobs:
         npm test
         npm prune --production
         npm pkg fix
-
-    - name: Increment Package Version
-      run: |
         VERSION_INFO=$(cat ${GITHUB_WORKSPACE}/version.txt)
         echo ${VERSION_INFO}
         grunt bump:${VERSION_INFO}
