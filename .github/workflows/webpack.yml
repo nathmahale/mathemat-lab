@@ -31,11 +31,11 @@ jobs:
         npm ls
         npm run-script build
         npm test
-        npm prune --production
-        npm pkg fix
         VERSION_INFO=$(cat ${GITHUB_WORKSPACE}/version.txt)
         echo ${VERSION_INFO}
         grunt bump:${VERSION_INFO}
+        npm prune --production
+        npm pkg fix
 
     - name: Publish NPM package
       uses: JS-DevTools/npm-publish@v3
