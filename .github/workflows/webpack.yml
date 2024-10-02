@@ -36,7 +36,7 @@ jobs:
     - name: Increment Package Version
       run: |
         VERSION_INFO=$(cat ${GITHUB_WORKSPACE}/version.txt)
-        npm run version ${VERSION_INFO}
+        grunt bump:${VERSION_INFO}
 
     - name: Publish NPM package
       uses: JS-DevTools/npm-publish@v3

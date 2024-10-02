@@ -26,6 +26,7 @@
     "express": "^4.16.2"
   },
   "devDependencies": {
+    "grunt": "1.6.1",
     "lru-cache": "11.0.1",
     "glob": "11.0.0",
     "math": "0.0.3",
