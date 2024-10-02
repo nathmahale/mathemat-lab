@@ -26,6 +26,7 @@ jobs:
     - name: Local Test Build
       run: |
         npm config set fund false --location=global  
+        npm update
         npm install --package-lock
         npm ls
         npm run-script build
