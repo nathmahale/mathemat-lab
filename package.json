@@ -1,6 +1,6 @@
 {
   "name"       : "mathemat-lab",
-  "version"    : "2.0.0",
+  "version"    : "2.1.0",
   "description": "A demo of a simple nodejs app Calculator with automated testing",
   "main"       : "app.js",
   "scripts"    : {
