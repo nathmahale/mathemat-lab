@@ -31,7 +31,10 @@ jobs:
         npm test
         npm prune --production
         npm pkg fix
-        npm run version $(cat version.txt)
+
+    - name: Increment Package Version
+      run: |
+        npm run version $(cat ./version.txt)
 
     - name: Publish NPM package
       uses: JS-DevTools/npm-publish@v3
