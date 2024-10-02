@@ -40,9 +40,9 @@ jobs:
       run: |
         git config --global user.email "gh.actions@github.com"
         git config --global user.name "GH Actions User"
-        # echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
     
     - name: Bump up package version based on version.txt value
+      if: ${{ github.event.head_commit.message != 'cosmetic changes' }}
       run: |
         VERSION_INFO=$(cat ${GITHUB_WORKSPACE}/version.txt)
         echo ${VERSION_INFO}

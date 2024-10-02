@@ -7,4 +7,4 @@ Sample nodejs app for calculator
 
 [![npm version](https://badge.fury.io/js/mathemat-lab.svg)](https://badge.fury.io/js/mathemat-lab)
 
-[![NPM](https://nodei.co/npm/express.png)](https://nodei.co/npm/mathemat-lab/)
+[![NPM](https://nodei.co/npm/mathemat-lab.png)](https://nodei.co/npm/mathemat-lab/)
