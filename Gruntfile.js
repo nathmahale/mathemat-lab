@@ -1,6 +1,6 @@
-grunt.loadNpmTasks('grunt-bump');
+module.exports = function (grunt) {
 
-grunt.initConfig({
+  grunt.initConfig({
     bump: {
       options: {
         files: ['package.json'],
@@ -21,3 +21,10 @@ grunt.initConfig({
       }
     },
   })
+
+  // Load plugin
+  grunt.loadNpmTasks('grunt-bump');
+
+  // grunt.registerTask();
+
+};
