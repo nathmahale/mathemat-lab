@@ -23,7 +23,7 @@ jobs:
         node-version: 20.x
         check-latest: false
 
-    - name: Local Test Build | Increment Package Version
+    - name: Local Test Build
       run: |
         npm config set fund false --location=global  
         npm update
@@ -39,6 +39,8 @@ jobs:
       run: |
         git config --global user.email "gh.actions@github.com"
         git config --global user.name "GH Actions User"
+        echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/${GITHUB_REF_NAME}"
+        echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
     
     - name: Bump up package version based on version.txt value
       run: |

@@ -25,6 +25,4 @@ module.exports = function (grunt) {
   // Load plugin
   grunt.loadNpmTasks('grunt-bump');
 
-  // grunt.registerTask();
-
 };
