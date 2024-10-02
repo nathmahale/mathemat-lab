@@ -46,7 +46,15 @@ jobs:
       run: |
         VERSION_INFO=$(cat ${GITHUB_WORKSPACE}/version.txt)
         echo ${VERSION_INFO}
-        grunt bump:${VERSION_INFO}
+        GIT_COMMIT_MESSAGE_PREFIX="{{ github.event.head_commit.message }}"
+        if [[ ${GIT_COMMIT_MESSAGE_PREFIX} == "major:"* ]]; then
+          echo "Major version update"
+        elif [[ ${GIT_COMMIT_MESSAGE_PREFIX} == "minor:"* ]]; then
+          echo "Minor version update"
+        elif [[ ${GIT_COMMIT_MESSAGE_PREFIX} == "patch:"* ]]; then
+        	echo "Patch version update"
+        fi
+        grunt bump:${GIT_COMMIT_MESSAGE_PREFIX}
         
     - name: Clean-up devDependencies
       run: |
