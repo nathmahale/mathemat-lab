@@ -27,11 +27,15 @@ jobs:
         npm run-script build
         npm test
         npm prune --production
+        npm pkg fix
 
     - name: Publish NPM package
       uses: JS-DevTools/npm-publish@v3
       with:
-          token: ${{ secrets.NPM_REPO_ACCESS_TOKEN }}
+        token: ${{ secrets.NPM_REPO_ACCESS_TOKEN }}
+        provenance: true
+        access: public
+        ignore-scripts: true
 
   dockerBuildAndPushJob:
     name: dockerBuildAndPushJob

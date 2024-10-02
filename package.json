@@ -1,5 +1,5 @@
 {
-  "name": "math-lab",
+  "name": "mathemat-lab",
   "version": "1.0.0",
   "description": "A demo of a simple nodejs app Calculator running on Jenkins v2.319.3",
   "main": "app.js",
