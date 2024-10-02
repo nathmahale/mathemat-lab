@@ -12,14 +12,16 @@ RUN apk add curl && \
 
 WORKDIR /usr/src/app
 
-RUN echo $GIT_VERSION_TAG > GIT_VERSION_TAG.txt
-RUN echo $GIT_COMMIT_MESSAGE > GIT_COMMIT_MESSAGE.txt
-RUN echo $GIT_VERSION_HASH > GIT_VERSION_HASH.txt
+RUN \
+    echo $GIT_VERSION_TAG > GIT_VERSION_TAG.txt && \
+    echo $GIT_COMMIT_MESSAGE > GIT_COMMIT_MESSAGE.txt && \
+    echo $GIT_VERSION_HASH > GIT_VERSION_HASH.txt
 
 COPY . .
 
 COPY package*.json ./
-RUN npm install --package-lock && \
+RUN \
+    npm install --package-lock && \
     npm run-script build && \
     npm test && \
     npm prune --production
