@@ -44,15 +44,13 @@ jobs:
     
     - name: Bump up package version based on commit message prefix
       run: |
-        VERSION_INFO=$(cat ${GITHUB_WORKSPACE}/version.txt)
-        echo ${VERSION_INFO}
         GIT_COMMIT_MESSAGE=$(git log -1 --format=%s)
         if [[ ${GIT_COMMIT_MESSAGE} == "major:"* ]]; then
           grunt bump:major
         elif [[ ${GIT_COMMIT_MESSAGE} == "minor:"* ]]; then
           grunt bump:minor
         elif [[ ${GIT_COMMIT_MESSAGE} == "patch:"* ]]; then
-        	grunt bump:patch
+          grunt bump:patch
         else
           echo "[ INFO ] No version updates required"
         fi
