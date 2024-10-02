@@ -36,7 +36,7 @@ jobs:
       run: |
         npm test
         
-    - name: Setup git Config
+    - name: Setup git Config locally on Github Runner
       run: |
         git config --global user.email "gh.actions@github.com"
         git config --global user.name "GH Actions User"
