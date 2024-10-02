@@ -65,7 +65,7 @@ jobs:
         with:
           push: true
           no-cache: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/calculator-example-app:scm-sha-${{ env.COMMIT_SHORT_SHA }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/calculator-example-app:scm-sha-${{ env.COMMIT_SHORT_SHA }}, ${{ secrets.DOCKER_USERNAME }}/calculator-example-app:latest
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             GIT_VERSION_TAG=${{ env.RELEASE_VERSION }}
