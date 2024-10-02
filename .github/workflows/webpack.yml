@@ -1,4 +1,4 @@
-name: CalculatorJS-GH-Action
+name: CalculatorJS-Build-Push
 
 on:
   push:
@@ -34,7 +34,8 @@ jobs:
 
     - name: Increment Package Version
       run: |
-        npm run version $(cat ./version.txt)
+        # npm run version $(cat ./version.txt)
+        npm run
 
     - name: Publish NPM package
       uses: JS-DevTools/npm-publish@v3
