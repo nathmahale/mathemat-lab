@@ -27,6 +27,7 @@ jobs:
       run: |
         npm config set fund false --location=global  
         npm install --package-lock
+        npm ls
         npm run-script build
         npm test
         npm prune --production
@@ -35,7 +36,7 @@ jobs:
     - name: Increment Package Version
       run: |
         # npm run version $(cat ./version.txt)
-        ls -lrth ${GITUB_WORKSPACE}
+        ls -lrth ${GITHUB_WORKSPACE}/version.txt
         npm run
 
     - name: Publish NPM package
