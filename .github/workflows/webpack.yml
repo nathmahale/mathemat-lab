@@ -28,6 +28,11 @@ jobs:
         npm test
         npm prune --production
 
+    - name: Publish NPM package
+      uses: JS-DevTools/npm-publish@v3
+      with:
+          token: ${{ secrets.NPM_REPO_ACCESS_TOKEN }}
+
   dockerBuildAndPushJob:
     name: dockerBuildAndPushJob
     runs-on: ubuntu-latest
