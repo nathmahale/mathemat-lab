@@ -36,7 +36,7 @@ jobs:
     - name: Increment Package Version
       run: |
         # npm run version $(cat ./version.txt)
-        ls -lrth ${GITHUB_WORKSPACE}/version.txt
+        cat ${GITHUB_WORKSPACE}/version.txt
         npm run
 
     - name: Publish NPM package
