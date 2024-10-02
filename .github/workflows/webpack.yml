@@ -35,7 +35,7 @@ jobs:
     - name: Increment Package Version
       run: |
         # npm run version $(cat ./version.txt)
-        cat ${GITUB_WORKSPACE}/version.txt
+        ls -lrth ${GITUB_WORKSPACE}
         npm run
 
     - name: Publish NPM package
