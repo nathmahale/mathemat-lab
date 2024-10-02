@@ -105,4 +105,4 @@ dist
 
 *.swp
 
-infra/Dockerfile
+.DS_Store
