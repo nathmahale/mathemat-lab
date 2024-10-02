@@ -55,15 +55,18 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
       
       - name: Scrape build info
+        id: vars
         run: |
           echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      
+          calculatedSha=$(git rev-parse --short ${{ github.sha }})
+          echo "COMMIT_SHORT_SHA=$calculatedSha" >> $GITHUB_ENV
+        
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           push: true
           no-cache: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/calculator-example-app:scm-sha-${{ github.sha }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/calculator-example-app:scm-sha-${{ env.COMMIT_SHORT_SHA }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             GIT_VERSION_TAG=${{ env.RELEASE_VERSION }}
