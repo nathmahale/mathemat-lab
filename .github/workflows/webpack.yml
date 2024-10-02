@@ -39,7 +39,7 @@ jobs:
       run: |
         git config --global user.email "gh.actions@github.com"
         git config --global user.name "GH Actions User"
-        echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/${GITHUB_REF_NAME}"
+        git remote
         echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
     
     - name: Bump up package version based on version.txt value
