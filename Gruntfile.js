@@ -12,7 +12,7 @@ module.exports = function (grunt) {
         tagName: 'v%VERSION%',
         tagMessage: 'Version %VERSION%',
         push: true,
-        pushTo: 'https://github.com/nathmahale/calculator-app-nodejs',
+        pushTo: 'https://github.com/nathmahale/mathemat-lab',
         gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
         globalReplace: false,
         prereleaseName: false,
