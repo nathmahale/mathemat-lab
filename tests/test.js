@@ -214,10 +214,12 @@ describe("Calculator unit tests", function () {
 
   it("happy case sqrt", function (done) {
     request(app)
-      .get("/calculator/sqrt?first=625")
-      .set("Accept", /text/)
-      .expect("Content-Type", /text/)
-      .expect(Math.sqrt(625))
+      .get("/calculator/sqrt?first=625&second=25")
+      .set("Accept", "application/json")
+      .expect("Content-Type", /json/)
+      .expect(200, {
+        result: Math.sqrt(625),
+      })
       .end(function (err) {
         if (err) {
           return done(err);
