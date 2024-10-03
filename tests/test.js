@@ -216,7 +216,7 @@ describe("Calculator unit tests", function () {
     request(app)
       .get("/calculator/sqrt?first=625")
       .set("Accept", /text/)
-      .expect(Math.sqrt(625))
+      .expect(200, Math.sqrt(625))
       .end(function (err) {
         if (err) {
           return done(err);
