@@ -9,9 +9,9 @@ on:
 jobs:
   npmLocalBuildJob:
     if: |
-      github.event.head_commit.message != 'test' &&
-      github.event.head_commit.message != 'cosmetic changes' && 
-      github.event.head_commit.message != 'code fmt'
+      startsWith(github.event.head_commit.message, 'test') &&
+      startsWith(github.event.head_commit.message, 'cosmetic changes') &&
+      startsWith(github.event.head_commit.message, 'code fmt')
     name: npmLocalBuildJob
     runs-on: ubuntu-latest
     permissions:
