@@ -18,7 +18,8 @@ jobs:
       id-token: write
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Repo
+      uses: actions/checkout@v4
 
     - name: Use Node.js 20.x
       uses: actions/setup-node@v4
