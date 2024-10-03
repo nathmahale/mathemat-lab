@@ -8,9 +8,7 @@ on:
 
 jobs:
   npmLocalBuildJob:
-    if: |
-      startsWith(github.event.head_commit.message, 'test') &&
-      startsWith(github.event.head_commit.message, 'code fmt')
+    if: startsWith(github.event.head_commit.message, 'test') && startsWith(github.event.head_commit.message, 'code fmt')
     name: npmLocalBuildJob
     runs-on: ubuntu-latest
     permissions:
@@ -71,9 +69,7 @@ jobs:
         ignore-scripts: true
 
   dockerBuildAndPushJob:
-    if: |
-      startsWith(github.event.head_commit.message, 'test') &&
-      startsWith(github.event.head_commit.message, 'code fmt')
+    if:  startsWith(github.event.head_commit.message, 'test') && startsWith(github.event.head_commit.message, 'code fmt')
     name: dockerBuildAndPushJob
     runs-on: ubuntu-latest
     needs: npmLocalBuildJob
