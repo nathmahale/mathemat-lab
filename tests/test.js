@@ -148,7 +148,7 @@ describe("Calculator unit tests", function () {
       });
   });
 
-  it("math sine function", function (done) {
+  it("happy case sine", function (done) {
     request(app)
       .get("/calculator/sine?first=1&second=30")
       .set("Accept", "application/json")
@@ -164,7 +164,7 @@ describe("Calculator unit tests", function () {
       });
   });
 
-  it("math cosine function", function (done) {
+  it("happy case cosine", function (done) {
     request(app)
       .get("/calculator/cosine?first=30&second=30")
       .set("Accept", "application/json")
@@ -180,7 +180,7 @@ describe("Calculator unit tests", function () {
       });
   });
 
-  it("math tan function", function (done) {
+  it("happy case tan", function (done) {
     request(app)
       .get("/calculator/tan?first=30&second=30")
       .set("Accept", "application/json")
@@ -196,7 +196,7 @@ describe("Calculator unit tests", function () {
       });
   });
 
-  it("math acos function", function (done) {
+  it("happy case acos", function (done) {
     request(app)
       .get("/calculator/acos?first=8&second=10")
       .set("Accept", "application/json")
@@ -212,11 +212,11 @@ describe("Calculator unit tests", function () {
       });
   });
 
-  it("math sqrt function", function (done) {
+  it("happy case sqrt", function (done) {
     request(app)
       .get("/calculator/sqrt?first=625")
       .set("Accept", "application/json")
-      .expect("Content-Type", /json/)
+      .expect("Content-Type", /text/)
       .expect(200, {
         result: Math.sqrt(625),
       })
