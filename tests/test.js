@@ -211,4 +211,21 @@ describe("Calculator unit tests", function () {
         return done();
       });
   });
+
+  it("math sqrt function", function (done) {
+    request(app)
+      .get("/calculator/sqrt?first=625")
+      .set("Accept", "application/json")
+      .expect("Content-Type", /json/)
+      .expect(200, {
+        result: Math.sqrt(625),
+      })
+      .end(function (err) {
+        if (err) {
+          return done(err);
+        }
+        return done();
+      });
+  });
+  
 });
