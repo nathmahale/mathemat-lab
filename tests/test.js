@@ -216,7 +216,7 @@ describe("Calculator unit tests", function () {
     request(app)
       .get("/calculator/sqrt?first=625")
       .set("Accept", "application/json")
-      .expect("Content-Type", /text/)
+      .expect("Content-Type", /json/)
       .expect(200, {
         result: Math.sqrt(625),
       })
