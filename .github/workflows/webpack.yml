@@ -32,6 +32,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Setup git Config locally on Github Runner
+      run: |
+        git config --global user.email "gh.actions@github.com"
+        git config --global user.name "GH Actions User"
+    
     - name: Local Test Build
       run: |
         npm config set fund false --location=global  
@@ -47,11 +52,20 @@ jobs:
       run: |
         npm test
         
-    - name: Setup git Config locally on Github Runner
-      run: |
-        git config --global user.email "gh.actions@github.com"
-        git config --global user.name "GH Actions User"
-    
+    - name: Auto commit task
+      uses: stefanzweifel/git-auto-commit-action@v2.3.0
+      with:
+        commit_message: Apply automatic changes
+        branch: ${{ github.head_ref }}
+        commit_options: '--no-verify --signoff'
+        file_pattern: 'src/\*.js tests/*.js lib/routers/*.js'
+        status_options: '--untracked-files=no'
+        skip_dirty_check: true
+        skip_fetch: true
+        skip_checkout: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Bump up package version based on commit message prefix
       run: |
         GIT_COMMIT_MESSAGE=$(git log -1 --format=%s)
