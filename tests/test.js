@@ -1,3 +1,5 @@
+/*jshint -W117 */
+
 import request from "supertest";
 
 import { app } from "../app";
