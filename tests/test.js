@@ -1,6 +1,6 @@
-var request = require("supertest");
+import request from "supertest";
 
-var app = require("../app").app;
+import { app } from "../app";
 
 describe("Calculator unit tests", function () {
   it("happy case add", function (done) {
@@ -9,7 +9,7 @@ describe("Calculator unit tests", function () {
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)
       .expect(200, {
-        result: 1.2 + 3.4,
+        result: 1.2 + 3.4
       })
       .end(function (err) {
         if (err) {
@@ -25,7 +25,7 @@ describe("Calculator unit tests", function () {
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)
       .expect(200, {
-        result: 1.2 - 3.4,
+        result: 1.2 - 3.4
       })
       .end(function (err) {
         if (err) {
@@ -41,7 +41,7 @@ describe("Calculator unit tests", function () {
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)
       .expect(200, {
-        result: 1.2 * 3.4,
+        result: 1.2 * 3.4
       })
       .end(function (err) {
         if (err) {
@@ -57,7 +57,7 @@ describe("Calculator unit tests", function () {
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)
       .expect(200, {
-        result: 1.2 / 3.4,
+        result: 1.2 / 3.4
       })
       .end(function (err) {
         if (err) {
@@ -73,7 +73,7 @@ describe("Calculator unit tests", function () {
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)
       .expect(200, {
-        result: Math.pow(2, 2),
+        result: Math.pow(2, 2)
       })
       .end(function (err) {
         if (err) {
@@ -154,7 +154,7 @@ describe("Calculator unit tests", function () {
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)
       .expect(200, {
-        result: Math.sin(1),
+        result: Math.sin(1)
       })
       .end(function (err) {
         if (err) {
@@ -170,7 +170,7 @@ describe("Calculator unit tests", function () {
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)
       .expect(200, {
-        result: Math.cos(30),
+        result: Math.cos(30)
       })
       .end(function (err) {
         if (err) {
@@ -186,7 +186,7 @@ describe("Calculator unit tests", function () {
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)
       .expect(200, {
-        result: Math.tan(30),
+        result: Math.tan(30)
       })
       .end(function (err) {
         if (err) {
@@ -202,7 +202,7 @@ describe("Calculator unit tests", function () {
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)
       .expect(200, {
-        result: Math.acos(8 / 10),
+        result: Math.acos(8 / 10)
       })
       .end(function (err) {
         if (err) {
@@ -218,7 +218,7 @@ describe("Calculator unit tests", function () {
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)
       .expect(200, {
-        result: Math.sqrt(625),
+        result: Math.sqrt(625)
       })
       .end(function (err) {
         if (err) {
@@ -228,5 +228,4 @@ describe("Calculator unit tests", function () {
       });
   });
 
-// TODO: Add new test cases
 });
