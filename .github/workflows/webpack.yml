@@ -14,6 +14,11 @@ jobs:
       github.event.head_commit.message != 'code fmt'
     name: npmLocalBuildJob
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
     permissions:
       contents: write
       id-token: write
@@ -22,11 +27,10 @@ jobs:
     - name: Checkout Repo
       uses: actions/checkout@v4
 
-    - name: Use Node.js 20.x
+    - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
-        node-version: 20.x
-        check-latest: false
+        node-version: ${{ matrix.node-version }}
 
     - name: Local Test Build
       run: |
