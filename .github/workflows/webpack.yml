@@ -1,4 +1,4 @@
-name: CalculatorJS-Build-Push
+name: mathemat-lab-gh-workflow
 
 on:
   push:
