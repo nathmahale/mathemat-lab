@@ -8,3 +8,5 @@ Sample nodejs app for calculator
 [![npm version](https://badge.fury.io/js/mathemat-lab.svg)](https://badge.fury.io/js/mathemat-lab)
 
 [![NPM](https://nodei.co/npm/mathemat-lab.png)](https://nodei.co/npm/mathemat-lab/)
+
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
