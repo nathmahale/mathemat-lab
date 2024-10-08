@@ -26,6 +26,7 @@
     "express": "^4.16.2"
   },
   "devDependencies": {
+    "eslint"     : "9.12.0",
     "grunt-bump" : "0.8.0",
     "grunt"      : "1.6.1",
     "lru-cache"  : "11.0.1",

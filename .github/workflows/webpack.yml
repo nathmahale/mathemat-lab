@@ -34,7 +34,15 @@ jobs:
         npm update
         npm install --package-lock
         npm ls
-        npm run-script build
+        
+    - name: Run linters
+      uses: wearerequired/lint-action@v2
+      with:
+        eslint: true
+        
+    - name: Run build
+      run: |
+        npm run build
         
     - name: Run Tests
       run: |
