@@ -1,4 +1,4 @@
-/*jshint -W117 */
+/* global describe it before */
 
 import request from "supertest";
 
