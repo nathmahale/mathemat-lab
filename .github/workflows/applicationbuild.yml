@@ -14,6 +14,7 @@ jobs:
       github.event.head_commit.message != 'code fmt'
     name: npmLocalBuildJob
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     strategy:
       matrix:
@@ -105,6 +106,7 @@ jobs:
     name: dockerBuildAndPushJob
     runs-on: ubuntu-latest
     needs: npmLocalBuildJob
+    timeout-minutes: 30
     
     steps:
       - name: Set up QEMU
