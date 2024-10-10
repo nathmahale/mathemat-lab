@@ -1,1 +1,1 @@
-window.alert("from test file");
+window.alert('from test file')

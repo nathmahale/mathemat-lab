@@ -88,7 +88,7 @@ describe('Calculator unit tests', function () {
     request(app)
       .get('/calculator/add?second=3.4')
       .expect('Content-Type', /text/)
-      .expect(400, "missing required param 'first'")
+      .expect(400, "Missing required param 'first'")
       .end(function (err) {
         if (err) {
           return done(err)
@@ -101,7 +101,7 @@ describe('Calculator unit tests', function () {
     request(app)
       .get('/calculator/add?first=1.2')
       .expect('Content-Type', /text/)
-      .expect(400, "missing required parameter 'second'")
+      .expect(400, "Missing required parameter 'second'")
       .end(function (err) {
         if (err) {
           return done(err)
