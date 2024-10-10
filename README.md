@@ -3,7 +3,7 @@ Sample nodejs app for calculator
 
 # Badges
 
-[![NodeJS with Webpack](https://github.com/nathmahale/calculator-app-nodejs/actions/workflows/webpack.yml/badge.svg?branch=dev)](https://github.com/nathmahale/calculator-app-nodejs/actions/workflows/webpack.yml)
+[![mathemat-lab-gh-workflow](https://github.com/nathmahale/mathemat-lab/actions/workflows/applicationbuild.yml/badge.svg?branch=dev)](https://github.com/nathmahale/mathemat-lab/actions/workflows/applicationbuild.yml)
 
 [![npm version](https://badge.fury.io/js/mathemat-lab.svg)](https://badge.fury.io/js/mathemat-lab)
 
