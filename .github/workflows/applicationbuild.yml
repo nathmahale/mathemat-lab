@@ -54,7 +54,7 @@ jobs:
     
     - name: Run tests
       run: |
-        npx jest --coverage --detectOpenHandles
+        npx jest --coverage --detectOpenHandles --forceExit
 
     - name: Upload results to Codecov
       uses: codecov/codecov-action@v4
