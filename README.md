@@ -11,4 +11,4 @@ Sample nodejs app for calculator
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-[![codecov](https://codecov.io/github/nathmahale/mathemat-lab/graph/badge.svg?token=QE2QIVBDUS)](https://codecov.io/github/nathmahale/mathemat-lab)
+[![codecov](https://codecov.io/github/nathmahale/mathemat-lab/branch/dev/graph/badge.svg?token=QE2QIVBDUS)](https://codecov.io/github/nathmahale/mathemat-lab)
