@@ -1,5 +1,4 @@
 module.exports = function (grunt) {
-
   grunt.initConfig({
     bump: {
       options: {
@@ -19,10 +18,9 @@ module.exports = function (grunt) {
         metadata: '',
         regExp: false
       }
-    },
+    }
   })
 
   // Load plugin
-  grunt.loadNpmTasks('grunt-bump');
-
-};
+  grunt.loadNpmTasks('grunt-bump')
+}
