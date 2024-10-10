@@ -51,7 +51,16 @@ jobs:
     - name: Run Test script
       run: |
         npm test
-        
+    
+    - name: Run tests
+      run: |
+        npx jest --coverage
+
+    - name: Upload results to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+    
     - name: Auto commit task
       uses: stefanzweifel/git-auto-commit-action@v2.3.0
       with:

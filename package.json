@@ -25,6 +25,7 @@
     "express": "4.21.1"
   },
   "devDependencies": {
+    "jest"       : "29.7.0",
     "standard"   : "17.1.2",
     "grunt-bump" : "0.8.0",
     "grunt"      : "1.6.1",
