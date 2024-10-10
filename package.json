@@ -10,7 +10,6 @@
   },
   "keywords": [
     "docker",
-    "jenkins",
     "webpack",
     "mocha",
     "supertest",
@@ -23,7 +22,7 @@
   "author"      : "nathmahale",
   "license"     : "MIT",
   "dependencies": {
-    "express": "^4.16.2"
+    "express": "4.21.1"
   },
   "devDependencies": {
     "standard"   : "17.1.2",
