@@ -24,7 +24,7 @@
   "author": "nathmahale",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.16.2"
+    "express": "^5.1.0"
   },
   "devDependencies": {
     "math": "0.0.3",
