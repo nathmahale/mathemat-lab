@@ -33,7 +33,7 @@
     "mathjs": "14.4.0",
     "webpack": "5.99.5",
     "webpack-cli": "6.0.1",
-    "formidable": "3.5.2",
+    "formidable": "3.5.4",
     "growl": "1.10.5",
     "superagent": "10.2.0",
     "debug": "4.4.0",
