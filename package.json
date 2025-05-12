@@ -29,7 +29,7 @@
   "devDependencies": {
     "math": "0.0.3",
     "mocha": "11.2.2",
-    "supertest": "7.1.0",
+    "supertest": "7.1.1",
     "mathjs": "14.4.0",
     "webpack": "5.99.7",
     "webpack-cli": "6.0.1",
