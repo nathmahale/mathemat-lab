@@ -37,13 +37,8 @@ jobs:
       - name: Decrypt SOPS file with age in memory
         id: decrypt
         env:
-          AGE_KEY: ${{ secrets.AGE_KEY }}
+          SOPS_AGE_KEY: ${{ secrets.AGE_KEY }}
         run: |
-          exec 3<<<"$AGE_KEY"
-          
-          # Export SOPS variable to point to file descriptor
-          export SOPS_AGE_KEY_FD=3
-          
           DOCKER_USERNAME=$(sops decrypt --extract '["dockerhub"]["username"]' secrets.enc.yaml | yq .)
           DOCKER_PASSWORD=$(sops decrypt --extract '["dockerhub"]["pat"]' secrets.enc.yaml | yq .)
 
