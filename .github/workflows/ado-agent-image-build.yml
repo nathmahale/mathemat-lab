@@ -36,8 +36,8 @@ jobs:
 
       - name: Import PGP Key and decrypt secrets with sops
         env:
-            SOPS_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-            GPG_PRIVATE_KEY: ${{ secrets.SOPS_ADOAGENT_BUILD_PGP_KEY }}
+          SOPS_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_PRIVATE_KEY: ${{ secrets.SOPS_PGP_KEY }}
         run: |
           # mkdir -p "/home/runner/.gnupg"
           # chmod 700 "/home/runner/.gnupg"
