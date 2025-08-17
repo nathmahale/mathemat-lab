@@ -43,7 +43,10 @@ jobs:
           echo "GNUPGHOME=${GNUPGHOME}" >> $GITHUB_OUTPUT
           echo "allow-loopback-pinentry" >> ${GNUPGHOME}/gpg-agent.conf
           echo "use-keyboxd" >> ${GNUPGHOME}/common.conf
+
           gpgconf --kill gpg-agent
+          gpgconf --launch keyboxd
+
           echo "${{ secrets.SOPS_PGP_KEY }}" | gpg --batch --yes --import
           # Auto-trust the key to avoid "uid unknown" issues
           KEY_FPR=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr:/ {print $10; exit}')
@@ -73,7 +76,6 @@ jobs:
           SOPS_PGP_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
           # Decrypt directly into GitHub Actions output
-          gpgconf --launch keyboxd
           DOCKER_USERNAME=$(sops --verbose --decrypt --extract '["dockerhub.username"]' ./secrets.enc.yaml)
           DOCKER_PASSWORD=$(sops --verbose --decrypt --extract '["dockerhub.pat"]' ./secrets.enc.yaml)
 
