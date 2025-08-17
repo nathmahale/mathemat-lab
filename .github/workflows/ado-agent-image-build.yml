@@ -42,7 +42,7 @@ jobs:
           chmod 700 "$GNUPGHOME"
           echo "GNUPGHOME=${GNUPGHOME}" >> $GITHUB_OUTPUT
           echo "allow-loopback-pinentry" >> ${GNUPGHOME}/gpg-agent.conf
-          echo "use-keyboxd" >> ${GNUPGHOME}/gpg-agent.conf
+          echo "use-keyboxd" >> ${GNUPGHOME}/common.conf
           gpgconf --kill gpg-agent
           echo "${{ secrets.SOPS_PGP_KEY }}" | gpg --batch --yes --import
           # Auto-trust the key to avoid "uid unknown" issues
