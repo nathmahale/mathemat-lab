@@ -42,7 +42,7 @@ jobs:
           # mkdir -p "/home/runner/.gnupg"
           # chmod 700 "/home/runner/.gnupg"
           
-          export GPG_TTY=$(tty) || true
+          export GPG_TTY=$(tty)
           echo "${GPG_PRIVATE_KEY}" | gpg --batch --import
           
           # Auto-trust the key to avoid "uid unknown" issues
