@@ -59,8 +59,8 @@ jobs:
           GPG_TTY: $(tty)
         run: |
           # Decrypt directly into GitHub Actions output
-          DOCKER_USERNAME=$(sops --verbose -enable-local-keyservice --decrypt --extract '["dockerhub.username"]' ./secrets.enc.yaml)
-          DOCKER_PASSWORD=$(sops --verbose -enable-local-keyservice --decrypt --extract '["dockerhub.pat"]' ./secrets.enc.yaml)
+          DOCKER_USERNAME=$(sops --verbose --enable-local-keyservice --decrypt --extract '["dockerhub.username"]' ./secrets.enc.yaml)
+          DOCKER_PASSWORD=$(sops --verbose --enable-local-keyservice --decrypt --extract '["dockerhub.pat"]' ./secrets.enc.yaml)
 
           # Set as action outputs (kept secret)
           echo "docker_username=$DOCKER_USERNAME" >> $GITHUB_OUTPUT
