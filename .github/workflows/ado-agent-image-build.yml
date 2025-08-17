@@ -35,10 +35,9 @@ jobs:
 
       - name: Import PGP key
         env:
-          GPG_PRIVATE_KEY: ${{ secrets.SOPS_PGP_KEY }}
           GPG_TTY: $(tty)
         run: |
-          echo "${GPG_PRIVATE_KEY}" | gpg --batch --yes --import
+          echo "${{ secrets.SOPS_PGP_KEY }}" | gpg --batch --yes --import
           echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
           gpgconf --kill gpg-agent
 
@@ -48,6 +47,7 @@ jobs:
 
           gpg --list-keys
           gpg --list-secret-keys
+          ls -lrth /home/runner/.gnupg/
 
       - name: Decrypt with SOPS
         id: decrypt
@@ -78,6 +78,7 @@ jobs:
           password: ${{ steps.decrypt.outputs.docker_password }}
       
       - name: Set version tags
+        id: versiontags
         run: |
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
             VERSION="${GITHUB_REF_NAME#v}" # strip leading "v"
@@ -85,17 +86,17 @@ jobs:
             MINOR=$(echo $VERSION | cut -d. -f2)
             PATCH=$(echo $VERSION | cut -d. -f3)
             
-            echo "VERSION=$VERSION" >> $GITHUB_ENV
-            echo "MAJOR=$MAJOR" >> $GITHUB_ENV
-            echo "MINOR=$MINOR" >> $GITHUB_ENV
-            echo "PATCH=$PATCH" >> $GITHUB_ENV
+            echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+            echo "MAJOR=$MAJOR" >> $GITHUB_OUTPUT
+            echo "MINOR=$MINOR" >> $GITHUB_OUTPUT
+            echo "PATCH=$PATCH" >> $GITHUB_OUTPUT
           fi
 
       - name: Scrape build info
         id: vars
         run: |
-          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-          echo "COMMIT_SHORT_SHA=${GITHUB_SHA:0:6}" >> $GITHUB_ENV
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+          echo "COMMIT_SHORT_SHA=${GITHUB_SHA:0:6}" >> $GITHUB_OUTPUT
         
       - name: Build and push
         uses: docker/build-push-action@v6
@@ -103,10 +104,10 @@ jobs:
           push: true
           no-cache: true
           tags: |
-            ${{ steps.decrypt.outputs.docker_username }}/ado-agent:scm-sha-${{ env.COMMIT_SHORT_SHA }}, ${{ steps.decrypt.outputs.docker_username }}/ado-agent:latest
+            ${{ steps.decrypt.outputs.docker_username }}/ado-agent:scm-sha-${{ steps.vars.outputs.COMMIT_SHORT_SHA }}, ${{ steps.decrypt.outputs.docker_username }}/ado-agent:latest
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            GIT_VERSION_TAG=${{ env.RELEASE_VERSION }}
+            GIT_VERSION_TAG=${{ steps.vars.outputs.RELEASE_VERSION }}
             GIT_COMMIT_MESSAGE=${{ github.event.head_commit.message }}
             GIT_VERSION_HASH=${{ github.sha }}
           platforms: linux/arm64
