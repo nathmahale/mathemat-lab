@@ -49,6 +49,7 @@ jobs:
       - name: Decrypt secrets
         run: |
           export GPG_TTY=$(tty)
+          ls -lrth .
           sops --decrypt ./secrets.enc.yaml > secrets.dec.yaml
         working-directory: ./azuredevops/build-agent-docker
         env:
