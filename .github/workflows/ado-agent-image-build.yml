@@ -32,13 +32,14 @@ jobs:
           curl -LO "https://github.com/getsops/sops/releases/download/${SOPS_LATEST}/sops-${SOPS_LATEST}.linux.amd64"
           sudo mv "sops-${SOPS_LATEST}.linux.amd64" /usr/local/bin/sops
           sudo chmod +x /usr/local/bin/sops
-          command -v sops && sops --version
+          command -v sops && sops --version --check-for-updates
 
       - name: Import PGP Key
         run: |
           export GPG_TTY=$(tty)
           echo "${{ secrets.SOPS_ADOAGENT_BUILD_PGP_KEY }}" | gpg --batch --import
           gpg --list-keys
+          gpg --list-secret-keys
 
       - name: Configure GPG for loopback mode
         run: |
