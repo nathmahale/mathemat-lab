@@ -41,7 +41,8 @@ jobs:
           export GNUPGHOME=$(mktemp -d)
           chmod 700 "$GNUPGHOME"
           echo ${GNUPGHOME} >> $GITHUB_OUTPUT
-          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          mkdir -p ${GNUPGHOME}/gnupg
+          echo "allow-loopback-pinentry" >> ${GNUPGHOME}/gnupg/gpg-agent.conf
           gpgconf --kill gpg-agent
           echo "${{ secrets.SOPS_PGP_KEY }}" | gpg --batch --yes --import
           # Auto-trust the key to avoid "uid unknown" issues
