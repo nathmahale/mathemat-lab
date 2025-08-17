@@ -79,7 +79,7 @@ jobs:
       - name: Decrypt with SOPS
         id: decrypt
         env:
-          GNUPGHOME: "${{ steps.importpgp.outputs.GNUPGHOME }}"
+          GNUPGHOME: "${{ steps.gnupgconfig.outputs.GNUPGHOME }}"
         run: |
           # Decrypt directly into GitHub Actions output
           DOCKER_USERNAME=$(sops --verbose --decrypt --extract '["dockerhub.username"]' ./secrets.enc.yaml)
