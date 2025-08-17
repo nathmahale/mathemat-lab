@@ -43,16 +43,16 @@ jobs:
           # chmod 700 "/home/runner/.gnupg"
           
           export GPG_TTY=$(tty)
-          echo "${GPG_PRIVATE_KEY}" | gpg --batch --import
+          echo "${GPG_PRIVATE_KEY}" | gpg --batch --yes --import
           
           # Auto-trust the key to avoid "uid unknown" issues
           KEY_FPR=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr:/ {print $10; exit}')
           echo ${KEY_FPR}
-          echo -e "5\ny\n" | gpg --command-fd 0 --edit-key "$KEY_FPR" trust
+          echo -e "5\ny\n" | gpg --batch --yes --command-fd 0 --edit-key "$KEY_FPR" trust
 
           gpg --list-keys
           gpg --list-secret-keys
-          export GPG_OPTS="--batch --pinentry-mode loopback --passphrase ${SOPS_GPG_PASSPHRASE}"
+          export GPG_OPTS="--batch --yes --pinentry-mode loopback --passphrase ${SOPS_GPG_PASSPHRASE}"
           unset GPG_TTY
           SOPS_LOG_LEVEL=debug sops --decrypt ./secrets.enc.yaml > secrets.dec.yaml
         working-directory: ./azuredevops/build-agent-docker
