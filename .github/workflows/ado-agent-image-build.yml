@@ -47,13 +47,15 @@ jobs:
 
           gpg --list-keys
           gpg --list-secret-keys
-          cat /home/runner/.gnupg/gpg-agent.conf
+          gpg --batch \
+            --yes \
+            --pinentry-mode loopback \
+            --passphrase ${{ secrets.GPG_PASSPHRASE }} \
+            --export-secret-keys
 
       - name: Decrypt with SOPS
         id: decrypt
         env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          SOPS_PGP_FP: ${{secrets.SOPS_PGP_FP }}
           GPG_TTY: $(tty)
         run: |
           # echo "${GPG_PASSPHRASE}" > key.txt
