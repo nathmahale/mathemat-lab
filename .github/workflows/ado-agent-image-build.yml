@@ -39,15 +39,10 @@ jobs:
             SOPS_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
             GPG_PRIVATE_KEY: ${{ secrets.SOPS_ADOAGENT_BUILD_PGP_KEY }}
         run: |
-          mkdir -p "/home/runner/.gnupg"
-          chmod 700 "/home/runner/.gnupg"
+          # mkdir -p "/home/runner/.gnupg"
+          # chmod 700 "/home/runner/.gnupg"
           
-          echo "pinentry-mode loopback" >> /home/runner/.gnupg/gpg.conf
-          echo "use-agent" >> /home/runner/.gnupg/gpg.conf
-          echo "allow-loopback-pinentry" >> /home/runner/.gnupg/gpg-agent.conf
-          gpgconf --reload gpg-agent
-          
-          export GPG_TTY=$(tty)
+          export GPG_TTY=$(tty) || true
           echo "${GPG_PRIVATE_KEY}" | gpg --batch --import
           
           # Auto-trust the key to avoid "uid unknown" issues
@@ -56,6 +51,7 @@ jobs:
 
           gpg --list-keys
           gpg --list-secret-keys
+          export GPG_OPTS="--batch --pinentry-mode loopback --passphrase ${SOPS_GPG_PASSPHRASE}"
           SOPS_LOG_LEVEL=debug sops --decrypt ./secrets.enc.yaml > secrets.dec.yaml
         working-directory: ./azuredevops/build-agent-docker
 
