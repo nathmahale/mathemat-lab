@@ -106,3 +106,5 @@ dist
 *.swp
 
 .DS_Store
+
+secrets.dec*.yaml

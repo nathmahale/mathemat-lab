@@ -39,11 +39,8 @@ jobs:
         env:
           SOPS_AGE_KEY: ${{ secrets.AGE_KEY }}
         run: |
-          DOCKER_USERNAME=$(sops decrypt --extract '["dockerhub"]["username"]' secrets.enc.yaml | yq .)
-          DOCKER_PASSWORD=$(sops decrypt --extract '["dockerhub"]["pat"]' secrets.enc.yaml | yq .)
-
-          echo "docker_username=$DOCKER_USERNAME" >> $GITHUB_OUTPUT
-          echo "docker_password=$DOCKER_PASSWORD" >> $GITHUB_OUTPUT
+          echo "DOCKER_USERNAME=$(sops decrypt --extract '["dockerhub"]["username"]' secrets.enc.yaml | yq .)" >> $GITHUB_ENV
+          echo "DOCKER_PASSWORD=$(sops decrypt --extract '["dockerhub"]["pat"]' secrets.enc.yaml | yq .)" >> $GITHUB_ENV
         working-directory: ./azuredevops/build-agent-docker
         
       - name: Login to Docker Hub
@@ -51,8 +48,8 @@ jobs:
         id: dkrlogin
         uses: docker/login-action@v3
         with:
-          username: ${{ steps.decrypt.outputs.docker_username }}
-          password: ${{ steps.decrypt.outputs.docker_password }}
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
       
       - name: Set version tags
         id: versiontags
@@ -81,7 +78,8 @@ jobs:
           push: true
           no-cache: true
           tags: |
-            ${{ steps.decrypt.outputs.docker_username }}/ado-agent:scm-sha-${{ steps.vars.outputs.COMMIT_SHORT_SHA }}, ${{ steps.decrypt.outputs.docker_username }}/ado-agent:latest
+            ${{ env.DOCKER_USERNAME }}/ado-agent:scm-sha-${{ steps.vars.outputs.COMMIT_SHORT_SHA }},
+            ${{ env.DOCKER_USERNAME }}/ado-agent:latest
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             GIT_VERSION_TAG=${{ steps.vars.outputs.RELEASE_VERSION }}
@@ -92,6 +90,7 @@ jobs:
           file: ./azuredevops/build-agent-docker/Dockerfile
         
       - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
