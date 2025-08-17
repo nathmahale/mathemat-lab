@@ -54,7 +54,7 @@ jobs:
             --yes \
             --pinentry-mode loopback \
             --passphrase ${{ secrets.GPG_PASSPHRASE }} \
-            --export-secret-keys > /tmp/private.key
+            --export-secret-keys > /dev/null
 
       - name: Decrypt with SOPS
         id: decrypt
