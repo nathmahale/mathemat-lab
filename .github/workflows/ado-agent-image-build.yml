@@ -39,12 +39,20 @@ jobs:
           export GPG_TTY=$(tty)
           echo "${{ secrets.SOPS_ADOAGENT_BUILD_PGP_KEY }}" | gpg --batch --import
           gpg --list-keys
-          
+
+      - name: Configure GPG for loopback mode
+        run: |
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          echo "use-agent" >> ~/.gnupg/gpg.conf
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          gpgconf --reload gpg-agent
       - name: Decrypt secrets
         run: |
           export GPG_TTY=$(tty)
           sops --decrypt ./secrets.enc.yaml > secrets.dec.yaml
         working-directory: ./azuredevops/build-agent-docker
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Load secrets
         run: |
