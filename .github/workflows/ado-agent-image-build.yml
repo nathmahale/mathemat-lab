@@ -57,6 +57,14 @@ jobs:
             --passphrase ${{ secrets.GPG_PASSPHRASE }} \
             --export-secret-keys > /dev/null
 
+      - name: Populate .sops.yaml from template
+        id: populatesopsconfig
+        env:
+          SOPS_PGP_FINGERPRINT: ${{ secrets.SOPS_PGP_FP }}
+        run: |
+          envsubst < .sops.yaml.template > .sops.yaml
+        working-directory: ./azuredevops/build-agent-docker
+        
       - name: Decrypt with SOPS
         id: decrypt
         env:
@@ -65,6 +73,7 @@ jobs:
           SOPS_PGP_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
           # Decrypt directly into GitHub Actions output
+          gpgconf --launch keyboxd
           DOCKER_USERNAME=$(sops --verbose --decrypt --extract '["dockerhub.username"]' ./secrets.enc.yaml)
           DOCKER_PASSWORD=$(sops --verbose --decrypt --extract '["dockerhub.pat"]' ./secrets.enc.yaml)
 
