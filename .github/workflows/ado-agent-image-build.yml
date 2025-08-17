@@ -60,7 +60,7 @@ jobs:
         id: decrypt
         env:
           GPG_TTY: $(tty)
-          GNUPGHOME: ${{ steps.importpgp.outputs.GNUPGHOME }}
+          GNUPGHOME: "${{ steps.importpgp.outputs.GNUPGHOME }}"
           SOPS_PGP_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
           # Decrypt directly into GitHub Actions output
