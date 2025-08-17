@@ -51,13 +51,15 @@ jobs:
 
       - name: Decrypt with SOPS
         env:
-          SOPS_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           SOPS_PGP_FP: ${{secrets.SOPS_PGP_FP }}
           GPG_TTY: $(tty)
         run: |
-          sops -d --extract '["sops"]' ./secrets.enc.yaml | yq .
+          echo "${GPG_PASSPHRASE}" > key.txt
+          touch dummy.txt
+          gpg --batch --yes --passphrase-file key.txt --pinentry-mode=loopback -s dummy.txt 
           SOPS_LOG_LEVEL=debug sops --decrypt ./secrets.enc.yaml > secrets.dec.yaml
+          rm -rfv key.txt dummy.txt
         working-directory: ./azuredevops/build-agent-docker
         
       - name: Load secrets
