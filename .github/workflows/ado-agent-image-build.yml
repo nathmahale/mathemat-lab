@@ -1,0 +1,109 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches: [ "dev" ]
+    paths:
+      - azuredevops/build-agent-docker/**
+    tags: [ "v*" ] # build on version tags
+
+jobs:
+  adoDockerImageBuildJob:
+    if: |
+      github.event.head_commit.message != 'test' &&
+      github.event.head_commit.message != 'cosmetic changes' &&
+      github.event.head_commit.message != 'code fmt'
+    name: adoDockerImageBuildJob
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies (SOPS, GPG, yq)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnupg sops jq
+          wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_amd64
+          chmod +x /usr/local/bin/yq
+
+      - name: Import PGP Key
+        run: |
+          echo "${{ secrets.SOPS_ADOAGENT_BUILD_PGP_KEY }}" | gpg --import
+          gpg --list-keys
+          
+      - name: Decrypt secrets
+        run: |
+          sops -d secrets.enc.yaml > secrets.dec.yaml
+
+      - name: Load secrets
+        run: |
+          export DOCKER_USER=$(yq '.dockerhub.username' secrets.dec.yaml)
+          export DOCKER_PASS=$(yq '.dockerhub.token' secrets.dec.yaml)
+          echo "DOCKER_USER=$DOCKER_USER" >> $GITHUB_ENV
+          echo "DOCKER_PASS=$DOCKER_PASS" >> $GITHUB_ENV
+
+      - name: Log in to DockerHub
+        run: |
+          echo "${{ env.DOCKER_PASS }}" | docker login -u "${{ env.DOCKER_USER }}" --password-stdin
+
+      - name: Set version tags
+        run: |
+          IMAGE=${{ env.DOCKER_USER }}/ado-agent
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+          echo "SHA_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+          
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            VERSION="${GITHUB_REF_NAME#v}" # strip leading "v"
+            MAJOR=$(echo $VERSION | cut -d. -f1)
+            MINOR=$(echo $VERSION | cut -d. -f2)
+            PATCH=$(echo $VERSION | cut -d. -f3)
+            
+            echo "VERSION=$VERSION" >> $GITHUB_ENV
+            echo "MAJOR=$MAJOR" >> $GITHUB_ENV
+            echo "MINOR=$MINOR" >> $GITHUB_ENV
+            echo "PATCH=$PATCH" >> $GITHUB_ENV
+          fi
+
+      - name: Build and Push Docker Images
+        run: |
+
+          IMAGE=${{ env.IMAGE }}
+
+          # Always tag with commit SHA
+          docker build --tag $IMAGE:${{ env.SHA_TAG }} .
+          docker push $IMAGE:${{ env.SHA_TAG }}
+
+          # Push :latest only from main
+          if [[ "${GITHUB_REF_NAME}" == "main" ]]; then
+            docker tag $IMAGE:${{ env.SHA_TAG }} $IMAGE:latest
+            docker push $IMAGE:latest
+          fi
+
+          # Push semantic version tags if release tag exists
+          if [[ -n "${{ env.VERSION }}" ]]; then
+            docker tag $IMAGE:${{ env.SHA_TAG }} $IMAGE:${{ env.VERSION }}
+            docker push $IMAGE:${{ env.VERSION }}
+
+            docker tag $IMAGE:${{ env.SHA_TAG }} $IMAGE:${{ env.MAJOR }}.${{ env.MINOR }}
+            docker push $IMAGE:${{ env.MAJOR }}.${{ env.MINOR }}
+
+            docker tag $IMAGE:${{ env.SHA_TAG }} $IMAGE:${{ env.MAJOR }}
+            docker push $IMAGE:${{ env.MAJOR }}
+
+            # Save metadata file
+            echo "Built Docker images:" > release-images.txt
+            echo "$IMAGE:${{ env.SHA_TAG }}" >> release-images.txt
+            echo "$IMAGE:${{ env.VERSION }}" >> release-images.txt
+            echo "$IMAGE:${{ env.MAJOR }}.${{ env.MINOR }}" >> release-images.txt
+            echo "$IMAGE:${{ env.MAJOR }}" >> release-images.txt
+          fi
+        env:
+          BUILDPLATFORM: "linux/arm64"
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: release-images.txt

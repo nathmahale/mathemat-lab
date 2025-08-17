@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azdo-agent
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: azdo-agent
+  template:
+    metadata:
+      labels:
+        app: azdo-agent
+    spec:
+      containers:
+      - name: azdo-agent
+        image: ado-agent-tumbini:v22
+        imagePullPolicy: Never
+        resources:
+          requests:
+            memory: 1Gi
+            cpu: 500m
+          limits:
+            memory: 2Gi
+            cpu: 1000m
+        workingDir: /agent
+        env:
+        - name: AZP_URL
+          valueFrom:
+            secretKeyRef:
+              name: azdo-secret
+              key: AZP_URL
+        - name: AZP_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: azdo-secret
+              key: AZP_TOKEN
+        - name: AZP_AGENT_NAME
+          value: sphongle-jit-agent
+        - name: AZP_POOL
+          value: sphongle
+        - name: AZP_WORK
+          value: _work
+        livenessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - |
+                pgrep -f "Agent.Listener" > /dev/null
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - |
+                # Consider ready if the agent has created its .credentials file
+                [ -f /azp/.credentials ] && pgrep -f "Agent.Listener" > /dev/null
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 3
