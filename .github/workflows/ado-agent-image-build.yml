@@ -17,17 +17,11 @@ jobs:
     name: adoDockerImageBuildJob
     runs-on: ubuntu-latest
 
-    env:
-      GPG_TTY: $(tty)
-      SOPS_PGP_FINGERPRINT: "${{ secrets.SOPS_PGP_FP }}"
-      SOPS_PGP_PASSPHRASE: "${{ secrets.GPG_PASSPHRASE }}"
-      SOPS_PGP_FP: "${{ secrets.SOPS_PGP_FP }}"
-    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install dependencies (SOPS, yq)
+      - name: Install dependencies (SOPS, age, yq)
         run: |
           sudo apt-get update
           wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_amd64
@@ -39,59 +33,30 @@ jobs:
           sudo chmod +x /usr/local/bin/sops
           command -v sops && sops --version --check-for-updates
 
-      - name: Config GnuPG for keyboxd
-        id: gnupgconfig
-        run: |
-          mkdir -p /home/runner/.gnupg
-          chmod 700 /home/runner/.gnupg
-          echo "allow-loopback-pinentry" >> /home/runner/.gnupg/gpg-agent.conf
-          echo "use-keyboxd" >> /home/runner/.gnupg/common.conf
+          curl -LO https://dl.filippo.io/age/latest?for=linux/amd64
+          mv latest?for=linux/amd64 age
+          chmod +x age
+          sudo mv age /usr/local/bin/
+          age --version
 
-          gpgconf --kill gpg-agent
-          gpgconf --launch keyboxd
-
-      - name: Import PGP key into keyboxd
-        id: importpgp
-        run: |
-          echo "${{ secrets.SOPS_PGP_KEY }}" | gpg --batch --yes \
-            --pinentry-mode loopback \
-            --passphrase ${{ secrets.GPG_PASSPHRASE }} \
-            --import
-          
-          # Auto-trust the key to avoid "uid unknown" issues
-          KEY_FPR=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr:/ {print $10; exit}')
-          echo -e "5\ny\n" | gpg --batch --yes --command-fd 0 --edit-key "$KEY_FPR" trust
-
-          gpg --list-secret-keys --with-keygrip --keyid-format=long
-
-      - name: Dynamically generate .sops.yaml
-        id: sopsyamlgen
-        run: |
-          cat <<EOF > .sops.yaml
-          creation_rules:
-            - encrypted_regex: '^(data|stringData)$'
-              path_regex: \.yaml$
-              pgp: $SOPS_PGP_FINGERPRINT
-          EOF
-        working-directory: ./azuredevops/build-agent-docker
-        
-      - name: Decrypt with SOPS
+      - name: Decrypt SOPS file with age in memory
         id: decrypt
+        env:
+          AGE_KEY: ${{ secrets.AGE_KEY }}
         run: |
-          gpgconf --kill gpg-agent
-          gpgconf --launch keyboxd
+          exec 3<<<"$AGE_KEY"
+          
+          # Export SOPS variable to point to file descriptor
+          export SOPS_AGE_KEY_FD=3
+          
           DOCKER_USERNAME=$(sops decrypt --extract '["dockerhub"]["username"]' secrets.enc.yaml | yq .)
-          # DOCKER_PASSWORD=$(sops decrypt --extract '["dockerhub"]["pat"]' secrets.enc.yaml | yq .)
+          DOCKER_PASSWORD=$(sops decrypt --extract '["dockerhub"]["pat"]' secrets.enc.yaml | yq .)
 
           echo "docker_username=$DOCKER_USERNAME" >> $GITHUB_OUTPUT
           echo "docker_password=$DOCKER_PASSWORD" >> $GITHUB_OUTPUT
+          exec 3<&-
+
         working-directory: ./azuredevops/build-agent-docker
-        
-      # - name: Cleanup ephemeral keys
-      #   id: cleanupkeys
-      #   run: |
-      #     gpg --batch --delete-secret-keys "$SOPS_PGP_FINGERPRINT"
-      #     gpg --batch --delete-keys "$SOPS_PGP_FINGERPRINT"
         
       - name: Login to Docker Hub
         if: github.event_name != 'pull_request'
