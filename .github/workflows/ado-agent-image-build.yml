@@ -43,6 +43,7 @@ jobs:
         id: gnupgconfig
         run: |
           mkdir -p /home/runner/.gnupg
+          chmod 700 /home/runner/.gnupg
           echo "allow-loopback-pinentry" >> /home/runner/.gnupg/gpg-agent.conf
           echo "use-keyboxd" >> /home/runner/.gnupg/common.conf
 
