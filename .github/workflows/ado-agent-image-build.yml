@@ -51,18 +51,13 @@ jobs:
             --yes \
             --pinentry-mode loopback \
             --passphrase ${{ secrets.GPG_PASSPHRASE }} \
-            --export-secret-keys
+            --export-secret-keys > /tmp/private.key
 
       - name: Decrypt with SOPS
         id: decrypt
         env:
           GPG_TTY: $(tty)
         run: |
-          # echo "${GPG_PASSPHRASE}" > key.txt
-          # touch dummy.txt
-          # gpg --batch --yes --passphrase-file key.txt --pinentry-mode=loopback -s dummy.txt 
-          # SOPS_LOG_LEVEL=debug sops --decrypt ./secrets.enc.yaml > ./secrets.dec.yaml
-          # rm -rfv key.txt dummy.txt
           # Decrypt directly into GitHub Actions output
           DOCKER_USERNAME=$(sops --decrypt --extract '["dockerhub.username"]' ./secrets.enc.yaml)
           DOCKER_PASSWORD=$(sops --decrypt --extract '["dockerhub.pat"]' ./secrets.enc.yaml)
