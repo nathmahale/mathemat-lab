@@ -19,9 +19,9 @@ jobs:
 
     env:
       GPG_TTY: $(tty)
-      SOPS_PGP_FINGERPRINT: ${{ secrets.SOPS_PGP_FP }}
-      SOPS_PGP_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-      SOPS_PGP_FP: ${{ secrets.SOPS_PGP_FP }}
+      SOPS_PGP_FINGERPRINT: "${{ secrets.SOPS_PGP_FP }}"
+      SOPS_PGP_PASSPHRASE: "${{ secrets.GPG_PASSPHRASE }}"
+      SOPS_PGP_FP: "${{ secrets.SOPS_PGP_FP }}"
     
     steps:
       - name: Checkout
