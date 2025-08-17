@@ -24,6 +24,7 @@ jobs:
       - name: Install dependencies (SOPS, age, yq)
         run: |
           sudo apt-get update
+          sudo apt install age -y
           wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_amd64
           chmod +x /usr/local/bin/yq
           SOPS_LATEST=$(curl -s "https://api.github.com/repos/getsops/sops/releases/latest" \
@@ -32,12 +33,6 @@ jobs:
           sudo mv "sops-${SOPS_LATEST}.linux.amd64" /usr/local/bin/sops
           sudo chmod +x /usr/local/bin/sops
           command -v sops && sops --version --check-for-updates
-
-          curl -LO https://dl.filippo.io/age/latest?for=linux/amd64
-          mv latest?for=linux/amd64 age
-          chmod +x age
-          sudo mv age /usr/local/bin/
-          age --version
 
       - name: Decrypt SOPS file with age in memory
         id: decrypt
