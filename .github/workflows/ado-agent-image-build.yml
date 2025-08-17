@@ -52,7 +52,7 @@ jobs:
           export GPG_TTY=$(tty)
           export SOPS_GPG_PASSPHRASE=$SOPS_GPG_PASSPHRASE
           ls -lrth .
-          sops --decrypt --gpg-binary gpg ./secrets.enc.yaml > secrets.dec.yaml
+          sops --decrypt ./secrets.enc.yaml > secrets.dec.yaml
         working-directory: ./azuredevops/build-agent-docker
         env:
           SOPS_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
