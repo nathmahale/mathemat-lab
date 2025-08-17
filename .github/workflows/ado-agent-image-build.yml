@@ -53,7 +53,6 @@ jobs:
           gpg --list-keys
           gpg --list-secret-keys
           export GPG_OPTS="--batch --yes --pinentry-mode loopback --passphrase ${SOPS_GPG_PASSPHRASE}"
-          unset GPG_TTY
           SOPS_LOG_LEVEL=debug sops --decrypt ./secrets.enc.yaml > secrets.dec.yaml
         working-directory: ./azuredevops/build-agent-docker
 
