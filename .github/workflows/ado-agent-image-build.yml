@@ -58,17 +58,20 @@ jobs:
           echo "${GPG_PASSPHRASE}" > key.txt
           touch dummy.txt
           gpg --batch --yes --passphrase-file key.txt --pinentry-mode=loopback -s dummy.txt 
-          SOPS_LOG_LEVEL=debug sops --decrypt ./secrets.enc.yaml > secrets.dec.yaml
+          SOPS_LOG_LEVEL=debug sops --decrypt ./secrets.enc.yaml > ./secrets.dec.yaml
           rm -rfv key.txt dummy.txt
         working-directory: ./azuredevops/build-agent-docker
         
       - name: Load secrets
         run: |
-          export DOCKER_USER=$(yq '.dockerhub.username' secrets.dec.yaml)
-          export DOCKER_PASS=$(yq '.dockerhub.token' secrets.dec.yaml)
+          export DOCKER_USER=$(yq '.dockerhub.username' ./secrets.dec.yaml)
+          export DOCKER_PASS=$(yq '.dockerhub.token' ./secrets.dec.yaml)
           echo "DOCKER_USER=$DOCKER_USER" >> $GITHUB_ENV
           echo "DOCKER_PASS=$DOCKER_PASS" >> $GITHUB_ENV
-
+          echo "[ INFO ] Cleanup secrets.dec.yaml"
+          rm -rfv secrets.dec.yaml
+        working-directory: ./azuredevops/build-agent-docker
+        
       - name: Log in to DockerHub
         run: |
           echo "${{ env.DOCKER_PASS }}" | docker login -u "${{ env.DOCKER_USER }}" --password-stdin
