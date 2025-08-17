@@ -50,12 +50,11 @@ jobs:
 
           gpg --list-keys
           gpg --list-secret-keys
-          echo "#####################"
-          gpg --batch \
-            --yes \
-            --pinentry-mode loopback \
-            --passphrase ${{ secrets.GPG_PASSPHRASE }} \
-            --export-secret-keys > /dev/null
+          # gpg --batch \
+          #   --yes \
+          #   --pinentry-mode loopback \
+          #   --passphrase ${{ secrets.GPG_PASSPHRASE }} \
+          #   --export-secret-keys > /dev/null
 
       - name: Decrypt with SOPS
         id: decrypt
