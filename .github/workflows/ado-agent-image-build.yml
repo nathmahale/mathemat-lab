@@ -71,8 +71,7 @@ jobs:
           push: true
           no-cache: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/ado-agent:scm-sha-${{ steps.vars.outputs.COMMIT_SHORT_SHA }},
-            fun-lab
+            ${{ secrets.DOCKER_USERNAME }}/ado-agent:${{ steps.vars.outputs.COMMIT_SHORT_SHA }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             GIT_VERSION_TAG=${{ steps.vars.outputs.RELEASE_VERSION }}
