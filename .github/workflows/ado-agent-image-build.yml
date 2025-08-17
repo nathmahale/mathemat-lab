@@ -65,17 +65,20 @@ jobs:
       - name: Load secrets
         run: |
           export DOCKER_USER=$(yq '.dockerhub.username' ./secrets.dec.yaml)
-          export DOCKER_PASS=$(yq '.dockerhub.token' ./secrets.dec.yaml)
+          export DOCKER_PASS=$(yq '.dockerhub.pat' ./secrets.dec.yaml)
           echo "DOCKER_USER=$DOCKER_USER" >> $GITHUB_ENV
           echo "DOCKER_PASS=$DOCKER_PASS" >> $GITHUB_ENV
           echo "[ INFO ] Cleanup secrets.dec.yaml"
           rm -rfv secrets.dec.yaml
         working-directory: ./azuredevops/build-agent-docker
         
-      - name: Log in to DockerHub
-        run: |
-          echo "${{ env.DOCKER_PASS }}" | docker login -u "${{ env.DOCKER_USER }}" --password-stdin
-
+      - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKER_USER }}
+          password: ${{ env.DOCKER_PASS }}
+      
       - name: Set version tags
         run: |
           IMAGE=${{ env.DOCKER_USER }}/ado-agent
