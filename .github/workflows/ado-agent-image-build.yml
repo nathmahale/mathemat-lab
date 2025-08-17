@@ -37,7 +37,7 @@ jobs:
       - name: Import PGP Key
         run: |
           export GPG_TTY=$(tty)
-          echo "${{ secrets.SOPS_ADOAGENT_BUILD_PGP_KEY }}" | gpg --import
+          echo "${{ secrets.SOPS_ADOAGENT_BUILD_PGP_KEY }}" | gpg --batch --import
           gpg --list-keys
           
       - name: Decrypt secrets
