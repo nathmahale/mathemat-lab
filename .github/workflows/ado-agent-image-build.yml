@@ -17,6 +17,11 @@ jobs:
     name: adoDockerImageBuildJob
     runs-on: ubuntu-24.04
 
+    env:
+      GPG_TTY: $(tty)
+      SOPS_PGP_FINGERPRINT: ${{ secrets.SOPS_PGP_FP }}
+      SOPS_PGP_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,11 +38,8 @@ jobs:
           sudo chmod +x /usr/local/bin/sops
           command -v sops && sops --version --check-for-updates
 
-      - name: Import PGP key
-        id: importpgp
-        env:
-          GPG_TTY: $(tty)
-          SOPS_PGP_FINGERPRINT: ${{ secrets.SOPS_PGP_FP }}
+      - name: Config GnuPG for keyboxd
+        id: gnupgconfig
         run: |
           export GNUPGHOME=$(mktemp -d)
           chmod 700 "$GNUPGHOME"
@@ -48,37 +50,36 @@ jobs:
           gpgconf --kill gpg-agent
           gpgconf --launch keyboxd
 
-          echo "${{ secrets.SOPS_PGP_KEY }}" | gpg --batch --yes --import
+      - name: Import PGP key into keyboxd
+        id: importpgp
+        run: |
+          echo "${{ secrets.SOPS_PGP_KEY }}" | gpg --batch --yes \
+            --pinentry-mode loopback \
+            --passphrase ${{ secrets.GPG_PASSPHRASE }} \
+            --import
+          
           # Auto-trust the key to avoid "uid unknown" issues
           KEY_FPR=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr:/ {print $10; exit}')
           echo -e "5\ny\n" | gpg --batch --yes --command-fd 0 --edit-key "$KEY_FPR" trust
 
           gpg --list-keys
           gpg --list-secret-keys --with-keygrip
-          mkdir -p tmp_gpg
-          gpg --batch \
-            --pinentry-mode loopback \
-            --passphrase ${{ secrets.GPG_PASSPHRASE }} \
-            --export-secret-keys ${SOPS_PGP_FINGERPRINT} | \
-            gpg --batch \
-            --pinentry-mode loopback \
-            --passphrase '' --import
-          gpg --list-secret-keys --with-keygrip
 
-      - name: Populate .sops.yaml from template
-        id: populatesopsconfig
-        env:
-          SOPS_PGP_FINGERPRINT: ${{ secrets.SOPS_PGP_FP }}
+      - name: Dynamically generate .sops.yaml
+        id: sopsyamlgen
         run: |
-          envsubst < .sops.yaml.template > .sops.yaml
+          cat <<EOF > .sops.yaml
+          creation_rules:
+            - encrypted_regex: '^(data|stringData)$'
+              path_regex: \.yaml$
+              pgp: $SOPS_PGP_FINGERPRINT
+          EOF
         working-directory: ./azuredevops/build-agent-docker
         
       - name: Decrypt with SOPS
         id: decrypt
         env:
-          GPG_TTY: $(tty)
           GNUPGHOME: "${{ steps.importpgp.outputs.GNUPGHOME }}"
-          SOPS_PGP_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
           # Decrypt directly into GitHub Actions output
           DOCKER_USERNAME=$(sops --verbose --decrypt --extract '["dockerhub.username"]' ./secrets.enc.yaml)
