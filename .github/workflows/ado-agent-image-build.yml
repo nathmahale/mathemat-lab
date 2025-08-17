@@ -42,7 +42,7 @@ jobs:
           
       - name: Decrypt secrets
         run: |
-          sops -d secrets.enc.yaml > secrets.dec.yaml
+          sops --decrypt azuredevops/build-agent-docker/secrets.enc.yaml > secrets.dec.yaml
 
       - name: Load secrets
         run: |
