@@ -5,6 +5,7 @@ on:
     branches: [ "dev" ]
     paths:
       - azuredevops/build-agent-docker/**
+      - .github/workflows/ado-agent-image-build.yml
     tags: [ "v*" ] # build on version tags
 
 jobs:
