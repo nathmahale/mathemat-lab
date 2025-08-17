@@ -39,8 +39,8 @@ jobs:
         env:
           SOPS_AGE_KEY: ${{ secrets.AGE_KEY }}
         run: |
-          export DOCKER_USERNAME=$(sops decrypt --extract '["dockerhub"]["username"]' secrets.enc.yaml | yq .)
-          export DOCKER_PAT=$(sops decrypt --extract '["dockerhub"]["pat"]' secrets.enc.yaml | yq .)
+          export DOCKERHUB_USER=$(sops decrypt --extract '["dockerhub"]["username"]' secrets.enc.yaml | yq .)
+          export DOCKERHUB_PAT=$(sops decrypt --extract '["dockerhub"]["pat"]' secrets.enc.yaml | yq .)
           echo "$DOCKERHUB_PAT" | docker login -u "$DOCKERHUB_USER" --password-stdin
         working-directory: ./azuredevops/build-agent-docker
       
