@@ -50,6 +50,7 @@ jobs:
 
           gpg --list-keys
           gpg --list-secret-keys
+          echo "#####################"
           gpg --batch \
             --yes \
             --pinentry-mode loopback \
