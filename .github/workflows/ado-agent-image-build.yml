@@ -48,15 +48,15 @@ jobs:
 
           gpg --list-keys
           gpg --list-secret-keys
-          export GPG_OPTS="--batch --yes --pinentry-mode loopback --passphrase ${SOPS_GPG_PASSPHRASE}"
 
       - name: Decrypt with SOPS
         env:
           SOPS_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           SOPS_PGP_FP: ${{secrets.SOPS_PGP_FP }}
+          GPG_TTY: $(tty)
         run: |
-          SOPS_LOG_LEVEL=debug sops --decrypt ./secrets.enc.yaml > secrets.dec.yaml
+          SOPS_LOG_LEVEL=debug sops --gpg-exec "--batch --yes --pinentry-mode loopback --passphrase ${SOPS_GPG_PASSPHRASE}" --decrypt ./secrets.enc.yaml > secrets.dec.yaml
         working-directory: ./azuredevops/build-agent-docker
         
       - name: Load secrets
