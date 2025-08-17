@@ -15,7 +15,7 @@ jobs:
       github.event.head_commit.message != 'cosmetic changes' &&
       github.event.head_commit.message != 'code fmt'
     name: adoDockerImageBuildJob
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     env:
       GPG_TTY: $(tty)
