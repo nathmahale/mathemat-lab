@@ -71,7 +71,7 @@ jobs:
           push: true
           no-cache: true
           tags: |
-            azure-devops-linux-agent:scm-sha-${{ steps.vars.outputs.COMMIT_SHORT_SHA }},
+            ${{ secrets.DOCKER_USERNAME }}/ado-agent:scm-sha-${{ steps.vars.outputs.COMMIT_SHORT_SHA }},
             fun-lab
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
