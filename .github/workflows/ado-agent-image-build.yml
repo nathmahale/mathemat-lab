@@ -34,9 +34,11 @@ jobs:
           sudo chmod +x /usr/local/bin/sops
           command -v sops && sops --version --check-for-updates
 
-      - name: Configure GPG and Import PGP Key
+      - name: Import PGP Key and decrypt secrets
         env:
-          GPG_PRIVATE_KEY: ${{ secrets.SOPS_ADOAGENT_BUILD_PGP_KEY }}
+            SOPS_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+            GPG_PRIVATE_KEY: ${{ secrets.SOPS_ADOAGENT_BUILD_PGP_KEY }}
+            SOPS_LOG_LEVEL: trace
         run: |
           # echo "pinentry-mode loopback" >> /home/runner/.gnupg/gpg.conf
           # echo "use-agent" >> /home/runner/.gnupg/gpg.conf
@@ -46,17 +48,8 @@ jobs:
           echo "${GPG_PRIVATE_KEY}" | gpg --batch --import
           gpg --list-keys
           gpg --list-secret-keys
-
-      - name: Decrypt secrets
-        run: |
-          export GPG_TTY=$(tty)
-          export SOPS_GPG_PASSPHRASE=$SOPS_GPG_PASSPHRASE
-          ls -lrth .
           sops --decrypt ./secrets.enc.yaml > secrets.dec.yaml
         working-directory: ./azuredevops/build-agent-docker
-        env:
-          SOPS_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          SOPS_LOG_LEVEL: trace
 
       - name: Load secrets
         run: |
