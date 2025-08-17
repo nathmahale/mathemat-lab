@@ -54,7 +54,7 @@ jobs:
           sops --decrypt ./secrets.enc.yaml > secrets.dec.yaml
         working-directory: ./azuredevops/build-agent-docker
         env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          SOPS_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Load secrets
         run: |
