@@ -24,13 +24,13 @@ jobs:
       - name: Install dependencies (SOPS, GPG, yq)
         run: |
           sudo apt-get update
-          sudo apt-get install -y gnupg2 jq sops
+          sudo apt-get install -y gnupg2 jq
           wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_amd64
           chmod +x /usr/local/bin/yq
-          # SOPS_LATEST=$(curl -s "https://api.github.com/repos/getsops/sops/releases/latest" \
-          #   | grep -Po '"tag_name": "\Kv?[0-9.]+' )
-          # curl -LO "https://github.com/getsops/sops/releases/download/${SOPS_LATEST}/sops-${SOPS_LATEST}.linux.amd64"
-          # sudo mv "sops-${SOPS_LATEST}.linux.amd64" /usr/local/bin/sops
+          SOPS_LATEST=$(curl -s "https://api.github.com/repos/getsops/sops/releases/latest" \
+            | grep -Po '"tag_name": "\Kv?[0-9.]+' )
+          curl -LO "https://github.com/getsops/sops/releases/download/${SOPS_LATEST}/sops-${SOPS_LATEST}.linux.amd64"
+          sudo mv "sops-${SOPS_LATEST}.linux.amd64" /usr/local/bin/sops
           sudo chmod +x /usr/local/bin/sops
           command -v sops && sops --version --check-for-updates
 
@@ -39,13 +39,13 @@ jobs:
             SOPS_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
             GPG_PRIVATE_KEY: ${{ secrets.SOPS_ADOAGENT_BUILD_PGP_KEY }}
         run: |
-          # echo "pinentry-mode loopback" >> /home/runner/.gnupg/gpg.conf
-          # echo "use-agent" >> /home/runner/.gnupg/gpg.conf
-          # echo "allow-loopback-pinentry" >> /home/runner/.gnupg/gpg-agent.conf
-          # gpgconf --reload gpg-agent
+          mkdir -p "/home/runner/.gnupg"
+          chmod 700 "/home/runner/.gnupg"
+          echo "pinentry-mode loopback" >> /home/runner/.gnupg/gpg.conf
+          echo "use-agent" >> /home/runner/.gnupg/gpg.conf
+          echo "allow-loopback-pinentry" >> /home/runner/.gnupg/gpg-agent.conf
+          gpgconf --reload gpg-agent
           export GPG_TTY=$(tty)
-          mkdir -p "$HOME/.gnupg"
-          chmod 700 "$HOME/.gnupg"
           echo "${GPG_PRIVATE_KEY}" | gpg --batch --import
           gpg --list-keys
           gpg --list-secret-keys
