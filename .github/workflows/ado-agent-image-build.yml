@@ -50,41 +50,35 @@ jobs:
           gpg --list-secret-keys
 
       - name: Decrypt with SOPS
+        id: decrypt
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           SOPS_PGP_FP: ${{secrets.SOPS_PGP_FP }}
           GPG_TTY: $(tty)
         run: |
-          echo "${GPG_PASSPHRASE}" > key.txt
-          touch dummy.txt
-          gpg --batch --yes --passphrase-file key.txt --pinentry-mode=loopback -s dummy.txt 
-          SOPS_LOG_LEVEL=debug sops --decrypt ./secrets.enc.yaml > ./secrets.dec.yaml
-          rm -rfv key.txt dummy.txt
-        working-directory: ./azuredevops/build-agent-docker
-        
-      - name: Load secrets
-        run: |
-          export DOCKER_USER=$(yq '.dockerhub.username' ./secrets.dec.yaml)
-          export DOCKER_PASS=$(yq '.dockerhub.pat' ./secrets.dec.yaml)
-          echo "DOCKER_USER=$DOCKER_USER" >> $GITHUB_ENV
-          echo "DOCKER_PASS=$DOCKER_PASS" >> $GITHUB_ENV
-          echo "[ INFO ] Cleanup secrets.dec.yaml"
-          rm -rfv secrets.dec.yaml
+          # echo "${GPG_PASSPHRASE}" > key.txt
+          # touch dummy.txt
+          # gpg --batch --yes --passphrase-file key.txt --pinentry-mode=loopback -s dummy.txt 
+          # SOPS_LOG_LEVEL=debug sops --decrypt ./secrets.enc.yaml > ./secrets.dec.yaml
+          # rm -rfv key.txt dummy.txt
+          # Decrypt directly into GitHub Actions output
+          DOCKER_USERNAME=$(sops --decrypt --extract '["dockerhub.username"]' ./secrets.enc.yaml)
+          DOCKER_PASSWORD=$(sops --decrypt --extract '["dockerhub.pat"]' ./secrets.enc.yaml)
+
+          # Set as action outputs (kept secret)
+          echo "docker_username=$DOCKER_USERNAME" >> $GITHUB_OUTPUT
+          echo "docker_password=$DOCKER_PASSWORD" >> $GITHUB_OUTPUT
         working-directory: ./azuredevops/build-agent-docker
         
       - name: Login to Docker Hub
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
-          username: ${{ env.DOCKER_USER }}
-          password: ${{ env.DOCKER_PASS }}
+          username: ${{ steps.decrypt.outputs.docker_username }}
+          password: ${{ steps.decrypt.outputs.docker_password }}
       
       - name: Set version tags
         run: |
-          IMAGE=${{ env.DOCKER_USER }}/ado-agent
-          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
-          echo "SHA_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
-          
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
             VERSION="${GITHUB_REF_NAME#v}" # strip leading "v"
             MAJOR=$(echo $VERSION | cut -d. -f1)
@@ -97,42 +91,6 @@ jobs:
             echo "PATCH=$PATCH" >> $GITHUB_ENV
           fi
 
-      # - name: Build and Push Docker Images
-      #   run: |
-      #     IMAGE=${{ env.IMAGE }}
-
-      #     # Always tag with commit SHA
-      #     docker build --platform=${BUILDPLATFORM} --tag $IMAGE:${{ env.SHA_TAG }} .
-      #     docker push $IMAGE:${{ env.SHA_TAG }}
-
-      #     # Push :latest only from main
-      #     if [[ "${GITHUB_REF_NAME}" == "main" ]]; then
-      #       docker tag $IMAGE:${{ env.SHA_TAG }} $IMAGE:latest
-      #       docker push $IMAGE:latest
-      #     fi
-
-      #     # Push semantic version tags if release tag exists
-      #     if [[ -n "${{ env.VERSION }}" ]]; then
-      #       docker tag $IMAGE:${{ env.SHA_TAG }} $IMAGE:${{ env.VERSION }}
-      #       docker push $IMAGE:${{ env.VERSION }}
-
-      #       docker tag $IMAGE:${{ env.SHA_TAG }} $IMAGE:${{ env.MAJOR }}.${{ env.MINOR }}
-      #       docker push $IMAGE:${{ env.MAJOR }}.${{ env.MINOR }}
-
-      #       docker tag $IMAGE:${{ env.SHA_TAG }} $IMAGE:${{ env.MAJOR }}
-      #       docker push $IMAGE:${{ env.MAJOR }}
-
-      #       # Save metadata file
-      #       echo "Built Docker images:" > release-images.txt
-      #       echo "$IMAGE:${{ env.SHA_TAG }}" >> release-images.txt
-      #       echo "$IMAGE:${{ env.VERSION }}" >> release-images.txt
-      #       echo "$IMAGE:${{ env.MAJOR }}.${{ env.MINOR }}" >> release-images.txt
-      #       echo "$IMAGE:${{ env.MAJOR }}" >> release-images.txt
-      #     fi
-      #   env:
-      #     BUILDPLATFORM: "linux/arm64"
-      #   working-directory: ./azuredevops/build-agent-docker
-
       - name: Scrape build info
         id: vars
         run: |
@@ -144,7 +102,8 @@ jobs:
         with:
           push: true
           no-cache: true
-          tags: ${{ env.DOCKER_USER }}/ado-agent:scm-sha-${{ env.COMMIT_SHORT_SHA }}, ${{ env.DOCKER_USER }}/ado-agent:latest
+          tags: |
+            ${{ steps.decrypt.outputs.docker_username }}/ado-agent:scm-sha-${{ env.COMMIT_SHORT_SHA }}, ${{ steps.decrypt.outputs.docker_username }}/ado-agent:latest
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             GIT_VERSION_TAG=${{ env.RELEASE_VERSION }}
