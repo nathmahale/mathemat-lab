@@ -42,9 +42,9 @@ jobs:
 
       - name: Configure GPG for loopback mode
         run: |
-          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-          echo "use-agent" >> ~/.gnupg/gpg.conf
-          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          echo "pinentry-mode loopback" >> /home/runner/.gnupg/gpg.conf
+          echo "use-agent" >> /home/runner/.gnupg/gpg.conf
+          echo "allow-loopback-pinentry" >> /home/runner/.gnupg/gpg-agent.conf
           gpgconf --reload gpg-agent
       - name: Decrypt secrets
         run: |
