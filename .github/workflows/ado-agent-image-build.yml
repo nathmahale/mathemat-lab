@@ -34,24 +34,25 @@ jobs:
           sudo chmod +x /usr/local/bin/sops
           command -v sops && sops --version --check-for-updates
 
-      - name: Import PGP Key
+      - name: Configure GPG and Import PGP Key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.SOPS_ADOAGENT_BUILD_PGP_KEY }}
         run: |
+          # echo "pinentry-mode loopback" >> /home/runner/.gnupg/gpg.conf
+          # echo "use-agent" >> /home/runner/.gnupg/gpg.conf
+          # echo "allow-loopback-pinentry" >> /home/runner/.gnupg/gpg-agent.conf
+          # gpgconf --reload gpg-agent
           export GPG_TTY=$(tty)
-          echo "${{ secrets.SOPS_ADOAGENT_BUILD_PGP_KEY }}" | gpg --batch --import
+          echo "${GPG_PRIVATE_KEY}" | gpg --batch --import
           gpg --list-keys
           gpg --list-secret-keys
 
-      - name: Configure GPG for loopback mode
-        run: |
-          echo "pinentry-mode loopback" >> /home/runner/.gnupg/gpg.conf
-          echo "use-agent" >> /home/runner/.gnupg/gpg.conf
-          echo "allow-loopback-pinentry" >> /home/runner/.gnupg/gpg-agent.conf
-          gpgconf --reload gpg-agent
       - name: Decrypt secrets
         run: |
           export GPG_TTY=$(tty)
+          export SOPS_GPG_PASSPHRASE=$SOPS_GPG_PASSPHRASE
           ls -lrth .
-          sops --decrypt ./secrets.enc.yaml > secrets.dec.yaml
+          sops --decrypt --gpg-binary gpg ./secrets.enc.yaml > secrets.dec.yaml
         working-directory: ./azuredevops/build-agent-docker
         env:
           SOPS_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
