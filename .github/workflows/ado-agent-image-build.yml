@@ -42,11 +42,9 @@ jobs:
       - name: Config GnuPG for keyboxd
         id: gnupgconfig
         run: |
-          export GNUPGHOME=$(mktemp -d)
-          chmod 700 "$GNUPGHOME"
-          echo "GNUPGHOME=${GNUPGHOME}" >> $GITHUB_OUTPUT
-          echo "allow-loopback-pinentry" >> ${GNUPGHOME}/gpg-agent.conf
-          echo "use-keyboxd" >> ${GNUPGHOME}/common.conf
+          mkdir -p /home/runner/.gnupg
+          echo "allow-loopback-pinentry" >> /home/runner/.gnupg/gpg-agent.conf
+          echo "use-keyboxd" >> /home/runner/.gnupg/common.conf
 
           gpgconf --kill gpg-agent
           gpgconf --launch keyboxd
@@ -78,12 +76,10 @@ jobs:
         
       - name: Decrypt with SOPS
         id: decrypt
-        env:
-          GNUPGHOME: "${{ steps.gnupgconfig.outputs.GNUPGHOME }}"
         run: |
           # Decrypt directly into GitHub Actions output
-          DOCKER_USERNAME=$(sops decrypt --extract '["dockerhub"]["username"]' ./secrets.enc.yaml | yq .)
-          DOCKER_PASSWORD=$(sops decrypt --extract '["dockerhub"]["pat"]' ./secrets.enc.yaml | yq .)
+          DOCKER_USERNAME=$(sops decrypt --extract '["dockerhub"]["username"]' secrets.enc.yaml | yq .)
+          DOCKER_PASSWORD=$(sops decrypt --extract '["dockerhub"]["pat"]' secrets.enc.yaml | yq .)
 
           # Set as action outputs (kept secret)
           echo "docker_username=$DOCKER_USERNAME" >> $GITHUB_OUTPUT
