@@ -56,6 +56,7 @@ jobs:
           SOPS_PGP_FP: ${{secrets.SOPS_PGP_FP }}
           GPG_TTY: $(tty)
         run: |
+          sops -d --extract '["sops"]' ./secrets.enc.yaml | yq .
           SOPS_LOG_LEVEL=debug sops --decrypt ./secrets.enc.yaml > secrets.dec.yaml
         working-directory: ./azuredevops/build-agent-docker
         
