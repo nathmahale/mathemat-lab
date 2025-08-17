@@ -24,7 +24,6 @@ jobs:
       - name: Install dependencies (SOPS, GPG, yq)
         run: |
           sudo apt-get update
-          sudo apt-get install -y gnupg2 jq
           wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_amd64
           chmod +x /usr/local/bin/yq
           SOPS_LATEST=$(curl -s "https://api.github.com/repos/getsops/sops/releases/latest" \
@@ -38,6 +37,7 @@ jobs:
         env:
           SOPS_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           GPG_PRIVATE_KEY: ${{ secrets.SOPS_PGP_KEY }}
+          SOPS_PGP_FP: ${{secrets.SOPS_PGP_FP }}
         run: |
           # mkdir -p "/home/runner/.gnupg"
           # chmod 700 "/home/runner/.gnupg"
@@ -47,7 +47,6 @@ jobs:
           
           # Auto-trust the key to avoid "uid unknown" issues
           KEY_FPR=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr:/ {print $10; exit}')
-          echo ${KEY_FPR}
           echo -e "5\ny\n" | gpg --batch --yes --command-fd 0 --edit-key "$KEY_FPR" trust
 
           gpg --list-keys
