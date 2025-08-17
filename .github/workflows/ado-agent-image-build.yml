@@ -43,7 +43,8 @@ jobs:
       - name: Decrypt secrets
         run: |
           export GPG_TTY=$(tty)
-          sops --decrypt azuredevops/build-agent-docker/secrets.enc.yaml > secrets.dec.yaml
+          sops --decrypt --gpg ./secrets.enc.yaml > secrets.dec.yaml
+        working-directory: ./azuredevops/build-agent-docker
 
       - name: Load secrets
         run: |
@@ -79,7 +80,7 @@ jobs:
           IMAGE=${{ env.IMAGE }}
 
           # Always tag with commit SHA
-          docker build --tag $IMAGE:${{ env.SHA_TAG }} .
+          docker build --platform=${BUILDPLATFORM} --tag $IMAGE:${{ env.SHA_TAG }} .
           docker push $IMAGE:${{ env.SHA_TAG }}
 
           # Push :latest only from main
@@ -108,6 +109,7 @@ jobs:
           fi
         env:
           BUILDPLATFORM: "linux/arm64"
+        working-directory: ./azuredevops/build-agent-docker
 
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
