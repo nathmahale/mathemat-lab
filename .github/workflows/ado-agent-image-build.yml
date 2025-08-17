@@ -47,7 +47,7 @@ jobs:
 
           gpg --list-keys
           gpg --list-secret-keys
-          ls -lrth /home/runner/.gnupg/
+          cat /home/runner/.gnupg/gpg-agent.conf
 
       - name: Decrypt with SOPS
         id: decrypt
