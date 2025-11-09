@@ -1,9 +1,7 @@
 var request = require("supertest");
 
 var app = require("../app").app;
-
-//function name
-
+
 //function name
 
 describe("Calculator unit tests", function () {
