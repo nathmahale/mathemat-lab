@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "math": "0.0.3",
-    "mocha": "11.7.4",
+    "mocha": "11.7.5",
     "supertest": "7.1.4",
     "mathjs": "15.1.0",
     "webpack": "5.102.1",
