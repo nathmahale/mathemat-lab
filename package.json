@@ -30,7 +30,7 @@
     "math": "0.0.3",
     "mocha": "11.7.5",
     "supertest": "7.2.2",
-    "mathjs": "15.1.0",
+    "mathjs": "15.1.1",
     "webpack": "5.105.2",
     "webpack-cli": "6.0.1",
     "formidable": "3.5.4",
